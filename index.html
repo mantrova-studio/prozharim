@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ПРОЖАРИМ — Grill & BBQ</title>
+  <meta name="description" content="Премиальный Grill & BBQ. Быстрая доставка, самовывоз. Оренбург." />
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script defer src="js/app.js"></script>
+</head>
+
+<body>
+  <div class="bg">
+    <div class="embers"></div>
+    <div class="vignette"></div>
+  </div>
+
+  <header class="header">
+    <div class="wrap header__row">
+      <a class="brand" href="#top" aria-label="ПРОЖАРИМ">
+        <img class="brand__logo" src="assets/logo.png" alt="ПРОЖАРИМ" />
+        <div class="brand__text">
+          <div class="brand__name">ПРОЖАРИМ</div>
+          <div class="brand__sub">GRILL & BBQ</div>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="#menu" class="nav__link">Меню</a>
+        <a href="#delivery" class="nav__link">Доставка</a>
+        <a href="#contacts" class="nav__link">Контакты</a>
+      </nav>
+
+      <button class="cartBtn" id="openCart" type="button">
+        <span class="cartBtn__label">Корзина</span>
+        <span class="cartBtn__count" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero__grid">
+        <div class="hero__content">
+          <div class="pill">Оренбург • 24/7 • Бесплатная доставка от 1000₽*</div>
+          <h1 class="hero__title">
+            Огонь в каждом кусочке.
+            <span class="grad">Grill & BBQ</span>
+          </h1>
+          <p class="hero__desc">
+            Шашлык, горячее, супы, салаты, пицца, напитки. Готовим быстро, привозим горячим.
+          </p>
+          <div class="hero__cta">
+            <a class="btn btn--primary" href="#menu">Открыть меню</a>
+            <a class="btn btn--ghost" href="#delivery">Условия доставки</a>
+          </div>
+
+          <div class="hero__stats">
+            <div class="stat">
+              <div class="stat__num">~30–60</div>
+              <div class="stat__txt">минут доставка*</div>
+            </div>
+            <div class="stat">
+              <div class="stat__num">3</div>
+              <div class="stat__txt">точки самовывоза</div>
+            </div>
+            <div class="stat">
+              <div class="stat__num">Geo</div>
+              <div class="stat__txt">расчёт зоны/цены</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero__visual" aria-hidden="true">
+          <div class="flameCard">
+            <div class="flameCard__badge">HOT</div>
+            <div class="flameCard__title">Хиты дня</div>
+            <div class="flameCard__list" id="hits"></div>
+            <div class="flameCard__hint">Добавляй в корзину — оформление за 30 секунд</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="menu">
+      <div class="wrap">
+        <div class="section__head">
+          <h2 class="section__title">Каталог</h2>
+          <div class="section__tools">
+            <div class="tabs" id="categoryTabs"></div>
+            <div class="search">
+              <input id="search" type="search" placeholder="Поиск по меню…" autocomplete="off">
+            </div>
+          </div>
+        </div>
+
+        <div class="grid" id="products"></div>
+      </div>
+    </section>
+
+    <section class="section section--dark" id="delivery">
+      <div class="wrap">
+        <h2 class="section__title">Доставка и самовывоз</h2>
+        <div class="infoGrid">
+          <div class="infoCard">
+            <div class="infoCard__title">Самовывоз</div>
+            <div class="infoCard__text">
+              Выбирайте удобную точку — адрес подставится автоматически.
+            </div>
+            <ul class="list">
+              <li>Оренбург, Театральная 1/1</li>
+              <li>Оренбург, 27 Линия 60</li>
+              <li>Оренбург, Кичигина 8</li>
+            </ul>
+          </div>
+
+          <div class="infoCard">
+            <div class="infoCard__title">Доставка</div>
+            <div class="infoCard__text">
+              Адрес можно ввести вручную или выбрать на карте. Стоимость рассчитывается по зонам GeoJSON.
+            </div>
+            <div class="smallNote">
+              * В демо-версии цены/зоны — пример. В проде подставим ваши реальные полигоны и тарифы.
+            </div>
+          </div>
+
+          <div class="infoCard">
+            <div class="infoCard__title">Оплата</div>
+            <div class="infoCard__text">
+              Наличные / карта. (Можем добавить онлайн-оплату позже.)
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contacts">
+      <div class="wrap">
+        <div class="contacts">
+          <div>
+            <h2 class="section__title">Контакты</h2>
+            <p class="muted">Заказы принимаются через сайт — и улетают в Telegram оператору.</p>
+          </div>
+          <div class="contacts__cards">
+            <div class="contactCard">
+              <div class="contactCard__label">Телефон</div>
+              <a class="contactCard__value" href="tel:+73532905005">+7 (3532) 905-005</a>
+            </div>
+            <div class="contactCard">
+              <div class="contactCard__label">Телефон</div>
+              <a class="contactCard__value" href="tel:+73532922887">+7 (3532) 922-887</a>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <div class="footer__line"></div>
+          <div class="footer__row">
+            <div class="muted">© PROЖАРИМ • Grill & BBQ</div>
+            <div class="muted">Сделано в стиле огня 🔥</div>
+          </div>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <!-- CART DRAWER -->
+  <div class="drawer" id="cartDrawer" aria-hidden="true">
+    <div class="drawer__backdrop" id="closeCart"></div>
+    <div class="drawer__panel">
+      <div class="drawer__head">
+        <div class="drawer__title">Корзина</div>
+        <button class="iconBtn" id="closeCart2" type="button" aria-label="Закрыть">✕</button>
+      </div>
+
+      <div class="drawer__body">
+        <div id="cartItems" class="cartItems"></div>
+      </div>
+
+      <div class="drawer__foot">
+        <div class="sumRow">
+          <div class="muted">Сумма</div>
+          <div class="sumVal" id="cartSubtotal">0 ₽</div>
+        </div>
+        <button class="btn btn--primary w100" id="goCheckout" type="button">Оформить заказ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal" id="checkoutModal" aria-hidden="true">
+    <div class="modal__backdrop" id="closeCheckout"></div>
+    <div class="modal__panel">
+      <div class="modal__head">
+        <div class="modal__title">Оформление заказа</div>
+        <button class="iconBtn" id="closeCheckout2" type="button" aria-label="Закрыть">✕</button>
+      </div>
+
+      <form class="modal__body" id="checkoutForm">
+        <div class="formGrid">
+          <div class="field">
+            <label>Имя</label>
+            <input name="name" required placeholder="Как к вам обращаться">
+          </div>
+          <div class="field">
+            <label>Телефон</label>
+            <input name="phone" required placeholder="+7 …" inputmode="tel">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Способ получения</label>
+          <div class="seg">
+            <button class="seg__btn isOn" type="button" data-mode="delivery">Доставка</button>
+            <button class="seg__btn" type="button" data-mode="pickup">Самовывоз</button>
+          </div>
+          <input type="hidden" name="mode" value="delivery">
+        </div>
+
+        <div class="field" id="pickupBlock" hidden>
+          <label>Адрес самовывоза</label>
+          <select name="pickupAddress">
+            <option>Оренбург, Театральная 1/1</option>
+            <option>Оренбург, 27 Линия 60</option>
+            <option>Оренбург, Кичигина 8</option>
+          </select>
+        </div>
+
+        <div id="deliveryBlock">
+          <div class="formGrid">
+            <div class="field">
+              <label>Адрес доставки</label>
+              <input name="address" placeholder="Введите адрес или выберите на карте">
+              <div class="hint">Можно нажать по карте или найти по адресу</div>
+            </div>
+            <div class="field">
+              <label>Поиск адреса</label>
+              <div class="row">
+                <input id="addrSearch" placeholder="Например: Оренбург, Ленина 10">
+                <button class="btn btn--ghost" id="btnSearchAddr" type="button">Найти</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mapWrap">
+            <div class="map" id="map"></div>
+            <div class="mapInfo" id="mapInfo">Выберите точку доставки…</div>
+          </div>
+        </div>
+
+        <div class="formGrid">
+          <div class="field">
+            <label>Оплата</label>
+            <select name="payment">
+              <option value="cash">Наличными</option>
+              <option value="card">Картой курьеру</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Комментарий</label>
+            <input name="comment" placeholder="Домофон, подъезд, этаж, примечания…">
+          </div>
+        </div>
+
+        <div class="totalBox">
+          <div class="totalRow">
+            <span>Сумма</span><b id="sumProducts">0 ₽</b>
+          </div>
+          <div class="totalRow">
+            <span>Доставка</span><b id="sumDelivery">—</b>
+          </div>
+          <div class="totalRow totalRow--grand">
+            <span>Итого</span><b id="sumTotal">0 ₽</b>
+          </div>
+          <div class="muted small">После отправки заказ улетит в Telegram оператору.</div>
+        </div>
+
+        <button class="btn btn--primary w100" type="submit" id="submitOrder">
+          Отправить заказ
+        </button>
+
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "zone": "A",
+        "restaurant": "Театральная 1/1",
+        "deliveryPrice": 150
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[55.05,51.76],[55.10,51.76],[55.10,51.80],[55.05,51.80],[55.05,51.76]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "zone": "B",
+        "restaurant": "27 Линия 60",
+        "deliveryPrice": 250
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[55.10,51.72],[55.16,51.72],[55.16,51.76],[55.10,51.76],[55.10,51.72]]]
+      }
+    }
+  ]
+}
