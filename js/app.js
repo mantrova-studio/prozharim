@@ -1,6 +1,6 @@
 /* PROЖАРИМ — магазин (GitHub Pages front)
    Корзина: localStorage
-   Доставка: Leaflet + Nominatim + GeoJSON зоны + point-in-polygon
+   Доставка: Yandex Maps + GeoJSON зоны + point-in-polygon
    Отправка заказа: через API (Cloudflare Worker / Netlify Function)
 */
 
@@ -104,7 +104,9 @@ function openCheckout(){
   els.checkoutModal.classList.add("isOn");
   els.checkoutModal.setAttribute("aria-hidden","false");
   renderTotals();
-  ensureMap();
+
+  // карта нужна только для доставки, но подготавливаем
+  ensureMap().catch(()=>{});
 }
 function closeCheckout(){
   els.checkoutModal.classList.remove("isOn");
@@ -258,37 +260,60 @@ function renderHits(){
   }
 }
 
-/* ===== Delivery: map + zones ===== */
-let map = null;
-let marker = null;
-let zonesLayer = null;
+/* ===== Delivery: Yandex map + zones ===== */
+let ymap = null;
+let ymarker = null;
 
-function ensureMap(){
-  if (map) return;
-  const center = [51.7682, 55.0968]; // Оренбург пример (lat,lng)
+function ymapsReady(){
+  return new Promise((resolve, reject)=>{
+    const start = Date.now();
+    (function wait(){
+      if (window.ymaps && typeof window.ymaps.ready === "function"){
+        window.ymaps.ready(()=>resolve(window.ymaps));
+        return;
+      }
+      if (Date.now() - start > 20000) return reject(new Error("Yandex Maps не загрузилась"));
+      setTimeout(wait, 50);
+    })();
+  });
+}
 
-  map = L.map("map", { zoomControl: true }).setView(center, 12);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution: "&copy; OpenStreetMap"
-  }).addTo(map);
+async function ensureMap(){
+  if (ymap) return;
+  const ymaps = await ymapsReady();
+  const center = [51.7682, 55.0968]; // Оренбург (lat, lng)
 
-  map.on("click", (e)=> setDeliveryPoint(e.latlng.lat, e.latlng.lng, null));
+  ymap = new ymaps.Map("map", {
+    center,
+    zoom: 12,
+    controls: ["zoomControl"]
+  }, {
+    suppressMapOpenBlock: true
+  });
 
-  if (ZONES){
-    zonesLayer = L.geoJSON(ZONES, {
-      style: () => ({ weight: 1, fillOpacity: 0.06 })
-    }).addTo(map);
-  }
+  // Клик по карте -> ставим точку -> reverse geocode -> заполняем адрес
+  ymap.events.add("click", async (e)=>{
+    const coords = e.get("coords");
+    await setDeliveryPoint(coords[0], coords[1], null, true);
+  });
 }
 
 async function geocode(query){
-  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
-  const res = await fetch(url, { headers: { "Accept":"application/json" }});
-  if (!res.ok) throw new Error("Geocode failed");
-  const arr = await res.json();
-  if (!arr.length) return null;
-  return { lat: parseFloat(arr[0].lat), lng: parseFloat(arr[0].lon), display: arr[0].display_name };
+  const ymaps = await ymapsReady();
+  const res = await ymaps.geocode(query, { results: 1 });
+  const first = res.geoObjects.get(0);
+  if (!first) return null;
+  const coords = first.geometry.getCoordinates();
+  const display = first.getAddressLine ? first.getAddressLine() : first.get("text");
+  return { lat: coords[0], lng: coords[1], display };
+}
+
+async function reverseGeocode(lat, lng){
+  const ymaps = await ymapsReady();
+  const res = await ymaps.geocode([lat, lng], { results: 1 });
+  const first = res.geoObjects.get(0);
+  if (!first) return "";
+  return first.getAddressLine ? first.getAddressLine() : (first.get("text") || "");
 }
 
 // point-in-polygon (ray casting), coords: [lng,lat]
@@ -325,14 +350,16 @@ function findZone(lat, lng){
   return null;
 }
 
-function setDeliveryPoint(lat, lng, addressStr){
+async function setDeliveryPoint(lat, lng, addressStr, doReverse=false){
   state.delivery.lat = lat;
   state.delivery.lng = lng;
 
-  if (!marker){
-    marker = L.marker([lat,lng]).addTo(map);
+  const ymaps = await ymapsReady();
+  if (!ymarker){
+    ymarker = new ymaps.Placemark([lat, lng], {}, { preset: "islands#redDotIcon" });
+    ymap.geoObjects.add(ymarker);
   } else {
-    marker.setLatLng([lat,lng]);
+    ymarker.geometry.setCoordinates([lat, lng]);
   }
 
   const zone = findZone(lat,lng);
@@ -340,21 +367,24 @@ function setDeliveryPoint(lat, lng, addressStr){
     state.delivery.zone = null;
     state.delivery.restaurant = null;
     state.delivery.price = null;
-    els.mapInfo.textContent = "Вне зоны доставки (или не загружены полигоны).";
   } else {
     state.delivery.zone = zone.properties?.zone ?? "—";
     state.delivery.restaurant = zone.properties?.restaurant ?? "—";
     state.delivery.price = Number(zone.properties?.deliveryPrice ?? 0);
-
-    els.mapInfo.textContent =
-      `Зона: ${state.delivery.zone} • Ресторан: ${state.delivery.restaurant} • Доставка: ${rub(state.delivery.price)}`;
   }
 
+  // ВАЖНО: заполняем поле адреса при клике по карте
   if (addressStr){
     state.delivery.address = addressStr;
     els.checkoutForm.elements.address.value = addressStr;
-  } else {
-    // если вручную кликнули — поле адреса оставим как есть
+  } else if (doReverse){
+    try{
+      const a = await reverseGeocode(lat, lng);
+      if (a){
+        state.delivery.address = a;
+        els.checkoutForm.elements.address.value = a;
+      }
+    }catch{}
   }
 
   renderTotals();
@@ -383,14 +413,17 @@ function setMode(mode){
   const btns = els.checkoutForm.querySelectorAll(".seg__btn");
   btns.forEach(b => b.classList.toggle("isOn", b.dataset.mode === mode));
 
+  // Самовывоз -> показываем select, скрываем карту
   if (mode === "pickup"){
     els.pickupBlock.hidden = false;
     els.deliveryBlock.hidden = true;
   } else {
+    // Доставка -> показываем карту, скрываем select
     els.pickupBlock.hidden = true;
     els.deliveryBlock.hidden = false;
     ensureMap();
   }
+
   renderTotals();
 }
 
@@ -423,6 +456,9 @@ function buildOrderPayload(form){
       type: "delivery",
       price: (typeof state.delivery.price === "number") ? state.delivery.price : null,
       address: form.address?.value?.trim() || state.delivery.address || "",
+      entrance: form.entrance?.value?.trim() || "",
+      floor: form.floor?.value?.trim() || "",
+      flat: form.flat?.value?.trim() || "",
       lat: state.delivery.lat,
       lng: state.delivery.lng,
       zone: state.delivery.zone,
@@ -488,8 +524,9 @@ async function init(){
       if (!q) return;
       const r = await geocode(q);
       if (!r) return showToast("Адрес не найден");
-      map.setView([r.lat, r.lng], 15);
-      setDeliveryPoint(r.lat, r.lng, r.display);
+      await ensureMap();
+      ymap.setCenter([r.lat, r.lng], 15, { duration: 250 });
+      await setDeliveryPoint(r.lat, r.lng, r.display, false);
     }catch(e){
       showToast("Ошибка поиска адреса");
     }
