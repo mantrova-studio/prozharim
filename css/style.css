@@ -15,6 +15,10 @@
 }
 
 *{box-sizing:border-box}
+
+/* hidden должен работать всегда */
+[hidden]{ display:none !important; }
+
 html,body{height:100%}
 body{
   margin:0;
@@ -22,7 +26,7 @@ body{
   background: var(--bg);
   color: var(--txt);
   overflow-x:hidden;
-  padding-top: 76px; /* отступ под fixed header */
+  padding-top: 76px;
 }
 
 a{color:inherit;text-decoration:none}
@@ -56,15 +60,12 @@ a{color:inherit;text-decoration:none}
 }
 
 .header{
-  /* Шапка всегда закреплена сверху и не должна исчезать */
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 20;
   background: rgba(6,6,7,.72);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(255,255,255,.08);
-
-  /* страховка от любых "скрывающих" эффектов */
   transform: none !important;
   opacity: 1 !important;
   visibility: visible !important;
@@ -311,9 +312,7 @@ a{color:inherit;text-decoration:none}
 .cartItem img{width:52px;height:52px;border-radius:14px;object-fit:cover}
 .cartItem__name{font-weight:900; font-size:14px}
 .cartItem__meta{color:var(--muted); font-size:12px}
-.qty{
-  display:flex; gap:8px; align-items:center;
-}
+.qty{display:flex; gap:8px; align-items:center}
 .qty button{
   width:34px; height:34px;
   border-radius:12px;
@@ -351,6 +350,9 @@ input:focus,select:focus{border-color: rgba(255,43,43,.45)}
 .formGrid{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
 @media (max-width: 760px){ .formGrid{grid-template-columns:1fr} }
 
+.formGrid--3{grid-template-columns: repeat(3, 1fr)}
+@media (max-width: 760px){ .formGrid--3{grid-template-columns:1fr} }
+
 .seg{display:flex; gap:10px}
 .seg__btn{
   flex:1;
@@ -368,8 +370,6 @@ input:focus,select:focus{border-color: rgba(255,43,43,.45)}
   background: rgba(255,43,43,.10);
 }
 .hint{color:var(--muted); font-size:12px}
-.row{display:flex; gap:10px}
-.row input{flex:1}
 
 .mapWrap{border-radius:18px; overflow:hidden; border:1px solid rgba(255,255,255,.10)}
 .map{height:320px; background:#111}
@@ -403,7 +403,6 @@ input:focus,select:focus{border-color: rgba(255,43,43,.45)}
 .infoCard__title{font-weight:950; margin-bottom:8px}
 .infoCard__text{color:var(--muted)}
 .list{margin:10px 0 0; padding-left:18px; color:var(--muted)}
-.smallNote{margin-top:10px; color:rgba(243,243,244,.55); font-size:12px}
 
 .contacts{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap}
 .contacts__cards{display:flex; gap:12px; flex-wrap:wrap}
@@ -433,33 +432,23 @@ input:focus,select:focus{border-color: rgba(255,43,43,.45)}
 }
 .toast.isOn{display:block}
 
-/* ===========================
-   Address suggest (исправлено)
-   =========================== */
-
-/* если ты добавишь class="field field--suggest" на поле адреса — будет идеально */
+/* ===== Address suggest (под app.js) ===== */
 .field--suggest{ position: relative; }
 
-/* если HTML не трогаешь, попробуем “подхватить” по id */
-#addressInput{ position: relative; }
-
-/* выпадающий список */
 #addressSuggest{
-  position: absolute;
-  left: 0;
-  right: 0;
+  position:absolute;
+  left:0; right:0;
   top: calc(100% + 6px);
   background: rgba(12,12,14,.98);
   border: 1px solid rgba(255,255,255,.12);
   border-radius: 12px;
-  overflow: hidden;
+  overflow:hidden;
   z-index: 9999;
   max-height: 240px;
-  overflow-y: auto;
+  overflow-y:auto;
   box-shadow: 0 18px 50px rgba(0,0,0,.55);
 }
 
-/* элементы */
 #addressSuggest .suggest__item{
   padding: 10px 12px;
   cursor: pointer;
