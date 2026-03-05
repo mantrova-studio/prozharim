@@ -434,4 +434,22 @@ input:focus,select:focus{border-color: rgba(255,43,43,.45)}
 
 .toast.isOn{display:block}
 
+.suggest{
+position:absolute;
+background:#111;
+border:1px solid rgba(255,255,255,.1);
+border-radius:8px;
+margin-top:4px;
+max-height:220px;
+overflow:auto;
+z-index:30;
+}
 
+.suggest div{
+padding:10px;
+cursor:pointer;
+}
+
+.suggest div:hover{
+background:#222;
+}
