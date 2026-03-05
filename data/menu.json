@@ -1,40 +1,530 @@
 [
   {
-    "id": "shash-kur-350",
+    "id": "shashlyk-iz-kurinogo-file",
     "category": "Шашлык",
     "name": "Шашлык из куриного филе",
-    "desc": "Сочный шашлык, фирменный маринад, подача с соусом.",
+    "desc": "",
     "price": 495,
     "weight": "350 г",
-    "img": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=70",
-    "hit": true
+    "img": "/assets/photos/Шашлык из куриного филе.jpg"
   },
   {
-    "id": "soup-borsh-300",
+    "id": "shashlyk-iz-svininy",
+    "category": "Шашлык",
+    "name": "Шашлык из свинины",
+    "desc": "",
+    "price": 495,
+    "weight": "350 г",
+    "img": "/assets/photos/Шашлык из свинины.jpg"
+  },
+  {
+    "id": "shashlyk-iz-govyadiny",
+    "category": "Шашлык",
+    "name": "Шашлык из говядины",
+    "desc": "",
+    "price": 595,
+    "weight": "350 г",
+    "img": "/assets/photos/Шашлык из говядины.jpg"
+  },
+  {
+    "id": "svinye-rebryshki-s-sousom",
+    "category": "Шашлык",
+    "name": "Свиные ребрышки с соусом",
+    "desc": "",
+    "price": 495,
+    "weight": "400 г",
+    "img": "/assets/photos/Свиные ребрышки с соусом.jpg"
+  },
+  {
+    "id": "steyk-myaso-po-frantsuzski",
+    "category": "Шашлык",
+    "name": "Стейк мясо по-Французски",
+    "desc": "",
+    "price": 435,
+    "weight": "390 г",
+    "img": "/assets/photos/Стейк мясо по-Французски.jpg"
+  },
+
+  {
+    "id": "borshch-s-govyadinoy",
     "category": "Супы",
-    "name": "Борщ с говядиной",
-    "desc": "Наваристый, с мясом, подача со сметаной.",
+    "name": "Борщ с Говядиной",
+    "desc": "",
     "price": 245,
     "weight": "300 г",
-    "img": "https://images.unsplash.com/photo-1604909053196-152c7f9d5b21?auto=format&fit=crop&w=1200&q=70",
-    "hit": true
+    "img": "/assets/photos/Борщ с Говядиной.jpg"
   },
   {
-    "id": "salad-caesar-230",
+    "id": "solyanka-myasnaya",
+    "category": "Супы",
+    "name": "Солянка Мясная",
+    "desc": "",
+    "price": 275,
+    "weight": "300 г",
+    "img": "/assets/photos/Солянка Мясная.jpg"
+  },
+  {
+    "id": "sup-lapsha",
+    "category": "Супы",
+    "name": "Суп лапша",
+    "desc": "",
+    "price": 145,
+    "weight": "300 г",
+    "img": "/assets/photos/Суп лапша.jpg"
+  },
+  {
+    "id": "krem-sup-gribnoy",
+    "category": "Супы",
+    "name": "Крем-Суп Грибной",
+    "desc": "",
+    "price": 225,
+    "weight": "280 г",
+    "img": "/assets/photos/Крем-Суп Грибной.jpg"
+  },
+  {
+    "id": "krem-sup-syrnyy",
+    "category": "Супы",
+    "name": "Крем-Суп Сырный",
+    "desc": "",
+    "price": 215,
+    "weight": "280 г",
+    "img": "/assets/photos/Крем-Суп Сырный.jpg"
+  },
+  {
+    "id": "krem-sup-iz-kukuruzy",
+    "category": "Супы",
+    "name": "Крем-Суп из Кукурузы",
+    "desc": "",
+    "price": 225,
+    "weight": "280 г",
+    "img": "/assets/photos/Крем-Суп из Кукурузы.jpg"
+  },
+  {
+    "id": "pelmeni-s-bulonom-bez-bulona",
+    "category": "Супы",
+    "name": "Пельмени с бульоном/ без бульона",
+    "desc": "",
+    "price": 235,
+    "weight": "300 г",
+    "img": "/assets/photos/Пельмени с бульоном без бульона.jpg"
+  },
+  {
+    "id": "okroshka-na-kvase",
+    "category": "Супы",
+    "name": "Окрошка на Квасе",
+    "desc": "",
+    "price": 125,
+    "weight": "300 г",
+    "img": "/assets/photos/Окрошка на Квасе.jpg"
+  },
+  {
+    "id": "okroshka-na-kefire",
+    "category": "Супы",
+    "name": "Окрошка на Кефире",
+    "desc": "",
+    "price": 125,
+    "weight": "300 г",
+    "img": "/assets/photos/Окрошка на Кефире.jpg"
+  },
+  {
+    "id": "lagman",
+    "category": "Супы",
+    "name": "Лагман",
+    "desc": "",
+    "price": 345,
+    "weight": "450 г",
+    "img": "/assets/photos/Лагман.jpg"
+  },
+  {
+    "id": "sup-tom-yam",
+    "category": "Супы",
+    "name": "Суп Том Ям",
+    "desc": "",
+    "price": 595,
+    "weight": "270 г",
+    "img": "/assets/photos/Суп Том Ям.jpg"
+  },
+  {
+    "id": "ukha-po-tsarski",
+    "category": "Супы",
+    "name": "Уха По-Царски",
+    "desc": "",
+    "price": 235,
+    "weight": "300 г",
+    "img": "/assets/photos/Уха По-Царски.jpg"
+  },
+  {
+    "id": "chuchvara",
+    "category": "Супы",
+    "name": "Чучвара",
+    "desc": "",
+    "price": 345,
+    "weight": "300 г",
+    "img": "/assets/photos/Чучвара.jpg"
+  },
+
+  {
+    "id": "pizza-pepperoni-35-sm",
+    "category": "Пицца",
+    "name": "Пицца «Пепперони» 35 см",
+    "desc": "",
+    "price": 900,
+    "weight": "670 г",
+    "img": "/assets/photos/Пицца «Пепперони» 35 см.jpg"
+  },
+  {
+    "id": "pizza-pepperoni-40-sm",
+    "category": "Пицца",
+    "name": "Пицца \"Пепперони\" 40 см",
+    "desc": "",
+    "price": 1350,
+    "weight": "900 г",
+    "img": "/assets/photos/Пицца \"Пепперони\" 40 см.jpg"
+  },
+  {
+    "id": "pizza-4-syra-35-sm",
+    "category": "Пицца",
+    "name": "Пицца «4 сыра» 35 см",
+    "desc": "",
+    "price": 850,
+    "weight": "600 г",
+    "img": "/assets/photos/Пицца «4 сыра» 35 см.jpg"
+  },
+  {
+    "id": "pizza-4-syra-40-sm",
+    "category": "Пицца",
+    "name": "Пицца \"4 Сыра\" 40 см",
+    "desc": "",
+    "price": 1250,
+    "weight": "820 г",
+    "img": "/assets/photos/Пицца \"4 Сыра\" 40 см.jpg"
+  },
+  {
+    "id": "pizza-grusha-gorgonzola-35-sm",
+    "category": "Пицца",
+    "name": "Пицца «Груша Горгонзола» 35 см",
+    "desc": "",
+    "price": 950,
+    "weight": "700 г",
+    "img": "/assets/photos/Пицца «Груша Горгонзола» 35 см.jpg"
+  },
+  {
+    "id": "pizza-grusha-gorgonzola-40-sm",
+    "category": "Пицца",
+    "name": "Пицца \"Груша Горгонзола\" 40 см",
+    "desc": "",
+    "price": 1380,
+    "weight": "900 г",
+    "img": "/assets/photos/Пицца \"Груша Горгонзола\" 40 см.jpg"
+  },
+  {
+    "id": "pizza-kampanyolla-35-sm",
+    "category": "Пицца",
+    "name": "Пицца «Кампаньёлла» 35 см",
+    "desc": "",
+    "price": 900,
+    "weight": "700 г",
+    "img": "/assets/photos/Пицца «Кампаньёлла» 35 см.jpg"
+  },
+  {
+    "id": "pizza-kampanyolla-40-sm",
+    "category": "Пицца",
+    "name": "Пицца \"Кампаньёлла\" 40 см",
+    "desc": "",
+    "price": 1150,
+    "weight": "950 г",
+    "img": "/assets/photos/Пицца \"Кампаньёлла\" 40 см.jpg"
+  },
+  {
+    "id": "pizza-lardo-40-sm",
+    "category": "Пицца",
+    "name": "Пицца \"Лардо\" 40 см",
+    "desc": "",
+    "price": 1290,
+    "weight": "950 г",
+    "img": "/assets/photos/Пицца \"Лардо\" 40 см.jpg"
+  },
+  {
+    "id": "pizza-lardo-35-sm",
+    "category": "Пицца",
+    "name": "Пицца «Лардо» 35 см",
+    "desc": "",
+    "price": 950,
+    "weight": "700 г",
+    "img": "/assets/photos/Пицца «Лардо» 35 см.jpg"
+  },
+  {
+    "id": "pizza-mareremonti-35-sm",
+    "category": "Пицца",
+    "name": "Пицца «Мареремонти» 35 см",
+    "desc": "",
+    "price": 1390,
+    "weight": "700 г",
+    "img": "/assets/photos/Пицца «Мареремонти» 35 см.jpg"
+  },
+  {
+    "id": "pizza-maremonti-40-sm",
+    "category": "Пицца",
+    "name": "Пицца \"Маремонти\" 40 см",
+    "desc": "",
+    "price": 1950,
+    "weight": "950 г",
+    "img": "/assets/photos/Пицца \"Маремонти\" 40 см.jpg"
+  },
+  {
+    "id": "pizza-montanara-40-sm",
+    "category": "Пицца",
+    "name": "Пицца \"Монтанара\" 40 см",
+    "desc": "",
+    "price": 1150,
+    "weight": "900 г",
+    "img": "/assets/photos/Пицца \"Монтанара\" 40 см.jpg"
+  },
+  {
+    "id": "pizza-montanara-35-sm",
+    "category": "Пицца",
+    "name": "Пицца «Монтанара» 35 см",
+    "desc": "",
+    "price": 800,
+    "weight": "670 г",
+    "img": "/assets/photos/Пицца «Монтанара» 35 см.jpg"
+  },
+  {
+    "id": "pizza-pikolini-40-sm",
+    "category": "Пицца",
+    "name": "Пицца \"Пиколини\" 40 см",
+    "desc": "",
+    "price": 1100,
+    "weight": "900 г",
+    "img": "/assets/photos/Пицца \"Пиколини\" 40 см.jpg"
+  },
+  {
+    "id": "pizza-ortolano-40-sm",
+    "category": "Пицца",
+    "name": "Пицца \"Ортолано\" 40 см",
+    "desc": "",
+    "price": 900,
+    "weight": "950 г",
+    "img": "/assets/photos/Пицца \"Ортолано\" 40 см.jpg"
+  },
+  {
+    "id": "pizza-ortolano-35-sm",
+    "category": "Пицца",
+    "name": "Пицца «Ортолано» 35 см",
+    "desc": "",
+    "price": 950,
+    "weight": "700 г",
+    "img": "/assets/photos/Пицца «Ортолано» 35 см.jpg"
+  },
+  {
+    "id": "pizza-pikolini-35-sm",
+    "category": "Пицца",
+    "name": "Пицца «Пиколини» 35 см",
+    "desc": "",
+    "price": 750,
+    "weight": "670 г",
+    "img": "/assets/photos/Пицца «Пиколини» 35 см.jpg"
+  },
+  {
+    "id": "pizza-proshutto-funge-35-sm",
+    "category": "Пицца",
+    "name": "Пицца «Прошутто Фунге» 35 см",
+    "desc": "",
+    "price": 750,
+    "weight": "690 г",
+    "img": "/assets/photos/Пицца «Прошутто Фунге» 35 см.jpg"
+  },
+  {
+    "id": "pizza-proshutto-funge-40-sm",
+    "category": "Пицца",
+    "name": "Пицца \"Прошутто Фунге\" 40 см",
+    "desc": "",
+    "price": 1050,
+    "weight": "950 г",
+    "img": "/assets/photos/Пицца \"Прошутто Фунге\" 40 см.jpg"
+  },
+  {
+    "id": "pizza-rivera-40-sm",
+    "category": "Пицца",
+    "name": "Пицца \"Ривьера\" 40 см",
+    "desc": "",
+    "price": 1250,
+    "weight": "1000 г",
+    "img": "/assets/photos/Пицца \"Ривьера\" 40 см.jpg"
+  },
+  {
+    "id": "pizza-rivera-35-sm",
+    "category": "Пицца",
+    "name": "Пицца «Ривьера» 35 см",
+    "desc": "",
+    "price": 1490,
+    "weight": "700 г",
+    "img": "/assets/photos/Пицца «Ривьера» 35 см.jpg"
+  },
+  {
+    "id": "pizza-tropikana-35-sm",
+    "category": "Пицца",
+    "name": "Пицца «Тропикана» 35 см",
+    "desc": "",
+    "price": 900,
+    "weight": "700 г",
+    "img": "/assets/photos/Пицца «Тропикана» 35 см.jpg"
+  },
+  {
+    "id": "pizza-tropikana-40-sm",
+    "category": "Пицца",
+    "name": "Пицца \"Тропикана\" 40 см",
+    "desc": "",
+    "price": 1250,
+    "weight": "1000 г",
+    "img": "/assets/photos/Пицца \"Тропикана\" 40 см.jpg"
+  },
+  {
+    "id": "pizza-chorizo-35-sm",
+    "category": "Пицца",
+    "name": "Пицца «Чоризо» 35 см",
+    "desc": "",
+    "price": 850,
+    "weight": "670 г",
+    "img": "/assets/photos/Пицца «Чоризо» 35 см.jpg"
+  },
+  {
+    "id": "pizza-chorizo-40-sm",
+    "category": "Пицца",
+    "name": "Пицца \"Чоризо\" 40 см",
+    "desc": "",
+    "price": 1100,
+    "weight": "900 г",
+    "img": "/assets/photos/Пицца \"Чоризо\" 40 см.jpg"
+  },
+
+  {
+    "id": "manty-govyadina-svinina",
+    "category": "Горячие Блюда",
+    "name": "Манты Говядина+Свинина",
+    "desc": "",
+    "price": 475,
+    "weight": "290 г",
+    "img": "/assets/photos/Манты Говядина+Свинина.jpg"
+  },
+
+  {
+    "id": "tsezar-s-kuritsey",
     "category": "Салаты",
     "name": "Цезарь с курицей",
-    "desc": "Салат ромэн, курица, соус, сыр, сухарики.",
+    "desc": "",
     "price": 375,
     "weight": "230 г",
-    "img": "https://images.unsplash.com/photo-1569058242403-1b23f9f8f8fb?auto=format&fit=crop&w=1200&q=70"
+    "img": "/assets/photos/Цезарь с курицей.jpg"
   },
   {
-    "id": "drink-mors-1l",
+    "id": "tsezar-s-krevetkoy",
+    "category": "Салаты",
+    "name": "Цезарь с креветкой",
+    "desc": "",
+    "price": 495,
+    "weight": "226 г",
+    "img": "/assets/photos/Цезарь с креветкой.jpg"
+  },
+  {
+    "id": "tsezar-s-lososem",
+    "category": "Салаты",
+    "name": "Цезарь с лососем",
+    "desc": "",
+    "price": 595,
+    "weight": "220 г",
+    "img": "/assets/photos/Цезарь с лососем.jpg"
+  },
+  {
+    "id": "tsezar-po-bavarski",
+    "category": "Салаты",
+    "name": "Цезарь по-баварски",
+    "desc": "",
+    "price": 385,
+    "weight": "215 г",
+    "img": "/assets/photos/Цезарь по-баварски.jpg"
+  },
+  {
+    "id": "grecheskiy",
+    "category": "Салаты",
+    "name": "Греческий",
+    "desc": "",
+    "price": 345,
+    "weight": "210 г",
+    "img": "/assets/photos/Греческий.jpg"
+  },
+  {
+    "id": "livanskiy-s-yagnenkom",
+    "category": "Салаты",
+    "name": "Ливанский с ягненком",
+    "desc": "",
+    "price": 375,
+    "weight": "215 г",
+    "img": "/assets/photos/Ливанский с ягненком.jpg"
+  },
+
+  {
+    "id": "sous-syrnyy-heinz",
+    "category": "Соусы",
+    "name": "Соус Сырный \"HEINZ\"",
+    "desc": "",
+    "price": 30,
+    "weight": "25 г",
+    "img": "/assets/photos/Соус Сырный \"HEINZ\".jpg"
+  },
+  {
+    "id": "sous-barbekyu-heinz",
+    "category": "Соусы",
+    "name": "Соус Барбекью \"HEINZ\"",
+    "desc": "",
+    "price": 30,
+    "weight": "25 г",
+    "img": "/assets/photos/Соус Барбекью \"HEINZ\".jpg"
+  },
+  {
+    "id": "sous-kislo-sladkiy-heinz",
+    "category": "Соусы",
+    "name": "Соус Кисло-Сладкий \"HEINZ\"",
+    "desc": "",
+    "price": 30,
+    "weight": "25 г",
+    "img": "/assets/photos/Соус Кисло-Сладкий \"HEINZ\".jpg"
+  },
+
+  {
+    "id": "mors-klyukva-smorodina-1l",
     "category": "Напитки",
-    "name": "Морс клюква-смородина",
-    "desc": "Домашний морс, насыщенный вкус.",
+    "name": "Морс Клюква-Смородина 1л",
+    "desc": "",
     "price": 180,
-    "weight": "1 л",
-    "img": "https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=1200&q=70"
+    "weight": "",
+    "img": "/assets/photos/Морс Клюква-Смородина 1л.jpg"
+  },
+  {
+    "id": "kola-dobryy-1l",
+    "category": "Напитки",
+    "name": "Кола \"Добрый\" 1л",
+    "desc": "",
+    "price": 200,
+    "weight": "",
+    "img": "/assets/photos/Кола \"Добрый\" 1л.jpg"
+  },
+  {
+    "id": "sprajt-dobryy-1l",
+    "category": "Напитки",
+    "name": "Спрайт \"Добрый\" 1 л",
+    "desc": "",
+    "price": 200,
+    "weight": "",
+    "img": "/assets/photos/Спрайт \"Добрый\" 1 л.jpg"
+  },
+  {
+    "id": "fanta-dobryy-1l",
+    "category": "Напитки",
+    "name": "Фанта \"Добрый\" 1 л",
+    "desc": "",
+    "price": 200,
+    "weight": "",
+    "img": "/assets/photos/Фанта \"Добрый\" 1 л.jpg"
   }
 ]
