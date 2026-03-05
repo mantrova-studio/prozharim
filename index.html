@@ -8,7 +8,7 @@
   <link rel="icon" href="assets/logo.png" />
   <link rel="stylesheet" href="css/style.css" />
 
-  <!-- Yandex Maps (вставь свой ключ) -->
+  <!-- Yandex Maps -->
   <script defer src="https://api-maps.yandex.ru/2.1/?apikey=62bb0bf1-3235-41f0-b3de-b09cfed11b52&lang=ru_RU"></script>
 
   <script defer src="js/app.js"></script>
@@ -109,9 +109,7 @@
         <div class="infoGrid">
           <div class="infoCard">
             <div class="infoCard__title">Самовывоз</div>
-            <div class="infoCard__text">
-              Выбирайте удобную точку для самовывоза из ресторана.
-            </div>
+            <div class="infoCard__text">Выбирайте удобную точку для самовывоза из ресторана.</div>
             <ul class="list">
               <li>Оренбург, Театральная 1/1</li>
               <li>Оренбург, 27 Линия 60</li>
@@ -121,9 +119,7 @@
 
           <div class="infoCard">
             <div class="infoCard__title">Доставка</div>
-            <div class="infoCard__text">
-              Бесплатная доставка в пределах города. Точная сумма указывается при оформлении заказа.
-            </div>
+            <div class="infoCard__text">Стоимость рассчитывается при оформлении заказа.</div>
           </div>
 
           <div class="infoCard">
@@ -217,7 +213,7 @@
           <input type="hidden" name="mode" value="delivery">
         </div>
 
-        <!-- ВАЖНО: этот блок виден только при Самовывоз -->
+        <!-- Только для Самовывоз -->
         <div class="field" id="pickupBlock" hidden>
           <label>Адрес самовывоза</label>
           <select name="pickupAddress">
@@ -227,22 +223,20 @@
           </select>
         </div>
 
-        <!-- ВАЖНО: этот блок виден только при Доставка -->
+        <!-- Только для Доставка -->
         <div id="deliveryBlock">
           <div class="formGrid">
-            <div class="field">
+            <div class="field field--suggest">
               <label>Адрес доставки</label>
-              <input name="address" id="addressInput" placeholder="Начните вводить адрес..." autocomlete="off">
-              <div id="addressSuggest" class="suggest"></div>
-              <div class="hint">Можно нажать по карте или найти по адресу</div>
+              <input
+                name="address"
+                id="addressInput"
+                placeholder="Начните вводить адрес..."
+                autocomplete="off"
+              >
+              <div id="addressSuggest"></div>
+              <div class="hint">Можно нажать по карте или выбрать из подсказок</div>
             </div>
-            <!-- <div class="field">
-              <label>Поиск адреса</label>
-              <div class="row">
-                <input id="addrSearch" placeholder="Например: Оренбург, Ленина 10">
-                <button class="btn btn--ghost" id="btnSearchAddr" type="button">Найти</button>
-              </div>
-            </div> -->
           </div>
 
           <div class="formGrid formGrid--3">
@@ -262,7 +256,6 @@
 
           <div class="mapWrap">
             <div class="map" id="map"></div>
-            <!-- Клиенту не показываем зоны -->
             <div class="mapInfo" id="mapInfo" hidden></div>
           </div>
         </div>
