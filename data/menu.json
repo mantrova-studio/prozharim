@@ -6,7 +6,7 @@
     "desc": "",
     "price": 495,
     "weight": "350 г",
-    "img": "/assets/photos/Шашлык из куриного филе.jpg",
+    "img": "./assets/photos/Шашлык из куриного филе.jpg",
     "hit": true
   },
   {
