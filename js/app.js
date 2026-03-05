@@ -34,10 +34,11 @@ const els = {
   sumTotal: document.getElementById("sumTotal"),
   toast: document.getElementById("toast"),
 
-  addrSearch: document.getElementById("addrSearch"),
-  btnSearchAddr: document.getElementById("btnSearchAddr"),
   mapInfo: document.getElementById("mapInfo"),
 };
+
+const addressInput = document.getElementById("addressInput");     // input name="address"
+const suggestBox   = document.getElementById("addressSuggest");   // dropdown container
 
 const STORAGE_KEY = "prozh_cart_v1";
 
@@ -55,13 +56,15 @@ let state = {
     address: "",
     zone: null,
     restaurant: null,
-    price: null,
+    price: null,       // number | null
+    available: false,  // true если попали в зону
   }
 };
 
 function rub(n){ return `${Math.round(n)} ₽`; }
 
 function showToast(msg){
+  if (!els.toast) { alert(msg); return; }
   els.toast.textContent = msg;
   els.toast.classList.add("isOn");
   setTimeout(()=>els.toast.classList.remove("isOn"), 2600);
@@ -105,8 +108,7 @@ function openCheckout(){
   els.checkoutModal.setAttribute("aria-hidden","false");
   renderTotals();
 
-  // карта нужна только для доставки, но подготавливаем
-  ensureMap().catch(()=>{});
+  if (state.mode === "delivery") ensureMap().catch(()=>{});
 }
 function closeCheckout(){
   els.checkoutModal.classList.remove("isOn");
@@ -164,7 +166,6 @@ function renderCart(){
       `;
       row.querySelector('[data-act="dec"]').addEventListener("click", ()=>decFromCart(id));
       row.querySelector('[data-act="inc"]').addEventListener("click", ()=>incFromCart(id));
-
       els.cartItems.appendChild(row);
     }
   }
@@ -291,21 +292,12 @@ async function ensureMap(){
     suppressMapOpenBlock: true
   });
 
-  // Клик по карте -> ставим точку -> reverse geocode -> заполняем адрес
+  // Полигоны НЕ рисуем — клиент не видит зоны
+
   ymap.events.add("click", async (e)=>{
-    const coords = e.get("coords");
+    const coords = e.get("coords"); // [lat,lng]
     await setDeliveryPoint(coords[0], coords[1], null, true);
   });
-}
-
-async function geocode(query){
-  const ymaps = await ymapsReady();
-  const res = await ymaps.geocode(query, { results: 1 });
-  const first = res.geoObjects.get(0);
-  if (!first) return null;
-  const coords = first.geometry.getCoordinates();
-  const display = first.getAddressLine ? first.getAddressLine() : first.get("text");
-  return { lat: coords[0], lng: coords[1], display };
 }
 
 async function reverseGeocode(lat, lng){
@@ -316,7 +308,7 @@ async function reverseGeocode(lat, lng){
   return first.getAddressLine ? first.getAddressLine() : (first.get("text") || "");
 }
 
-// point-in-polygon (ray casting), coords: [lng,lat]
+// point-in-polygon (ray casting), GeoJSON coords: [lng,lat]
 function pointInPolygon(point, vs){
   const x = point[0], y = point[1];
   let inside = false;
@@ -333,9 +325,11 @@ function pointInPolygon(point, vs){
 
 function findZone(lat, lng){
   if (!ZONES) return null;
-  const pt = [lng, lat];
+  const pt = [lng, lat]; // важно: GeoJSON = [lng,lat]
+
   for (const f of ZONES.features || []){
     if (!f.geometry) continue;
+
     if (f.geometry.type === "Polygon"){
       const ring = f.geometry.coordinates?.[0];
       if (ring && pointInPolygon(pt, ring)) return f;
@@ -347,6 +341,7 @@ function findZone(lat, lng){
       }
     }
   }
+
   return null;
 }
 
@@ -354,7 +349,9 @@ async function setDeliveryPoint(lat, lng, addressStr, doReverse=false){
   state.delivery.lat = lat;
   state.delivery.lng = lng;
 
-  const ymaps = await ymapsReady();
+  await ymapsReady();
+
+  // маркер
   if (!ymarker){
     ymarker = new ymaps.Placemark([lat, lng], {}, { preset: "islands#redDotIcon" });
     ymap.geoObjects.add(ymarker);
@@ -362,27 +359,33 @@ async function setDeliveryPoint(lat, lng, addressStr, doReverse=false){
     ymarker.geometry.setCoordinates([lat, lng]);
   }
 
-  const zone = findZone(lat,lng);
+  // зона
+  const zone = findZone(lat, lng);
   if (!zone){
     state.delivery.zone = null;
     state.delivery.restaurant = null;
     state.delivery.price = null;
+    state.delivery.available = false;
   } else {
     state.delivery.zone = zone.properties?.zone ?? "—";
     state.delivery.restaurant = zone.properties?.restaurant ?? "—";
-    state.delivery.price = Number(zone.properties?.deliveryPrice ?? 0);
+    const price = Number(zone.properties?.deliveryPrice ?? 0);
+    state.delivery.price = Number.isFinite(price) ? price : 0;
+    state.delivery.available = true;
   }
 
-  // ВАЖНО: заполняем поле адреса при клике по карте
+  // адрес
   if (addressStr){
     state.delivery.address = addressStr;
-    els.checkoutForm.elements.address.value = addressStr;
+    if (addressInput) addressInput.value = addressStr;
+    if (els.checkoutForm?.elements?.address) els.checkoutForm.elements.address.value = addressStr;
   } else if (doReverse){
     try{
       const a = await reverseGeocode(lat, lng);
       if (a){
         state.delivery.address = a;
-        els.checkoutForm.elements.address.value = a;
+        if (addressInput) addressInput.value = a;
+        if (els.checkoutForm?.elements?.address) els.checkoutForm.elements.address.value = a;
       }
     }catch{}
   }
@@ -394,11 +397,14 @@ function renderTotals(){
   const s = cartSum();
   els.sumProducts.textContent = rub(s);
 
-  let d = null;
   if (state.mode === "delivery"){
-    d = state.delivery.price;
-    els.sumDelivery.textContent = (typeof d === "number") ? rub(d) : "Укажите адрес";
-    els.sumTotal.textContent = (typeof d === "number") ? rub(s + d) : rub(s);
+    if (state.delivery.available && typeof state.delivery.price === "number"){
+      els.sumDelivery.textContent = rub(state.delivery.price);
+      els.sumTotal.textContent = rub(s + state.delivery.price);
+    } else {
+      els.sumDelivery.textContent = "Недоступно";
+      els.sumTotal.textContent = rub(s);
+    }
   } else {
     els.sumDelivery.textContent = "0 ₽";
     els.sumTotal.textContent = rub(s);
@@ -413,14 +419,12 @@ function setMode(mode){
   const btns = els.checkoutForm.querySelectorAll(".seg__btn");
   btns.forEach(b => b.classList.toggle("isOn", b.dataset.mode === mode));
 
-  // Самовывоз -> показываем select, скрываем карту
   if (mode === "pickup"){
-    els.pickupBlock.hidden = false;
-    els.deliveryBlock.hidden = true;
+    if (els.pickupBlock) els.pickupBlock.hidden = false;
+    if (els.deliveryBlock) els.deliveryBlock.hidden = true;
   } else {
-    // Доставка -> показываем карту, скрываем select
-    els.pickupBlock.hidden = true;
-    els.deliveryBlock.hidden = false;
+    if (els.pickupBlock) els.pickupBlock.hidden = true;
+    if (els.deliveryBlock) els.deliveryBlock.hidden = false;
     ensureMap();
   }
 
@@ -454,8 +458,9 @@ function buildOrderPayload(form){
   if (state.mode === "delivery"){
     delivery = {
       type: "delivery",
+      available: !!state.delivery.available,
       price: (typeof state.delivery.price === "number") ? state.delivery.price : null,
-      address: form.address?.value?.trim() || state.delivery.address || "",
+      address: (form.address?.value?.trim() || state.delivery.address || "").trim(),
       entrance: form.entrance?.value?.trim() || "",
       floor: form.floor?.value?.trim() || "",
       flat: form.flat?.value?.trim() || "",
@@ -497,6 +502,79 @@ async function sendOrder(payload){
   return data;
 }
 
+/* ===== Address suggestions in addressInput ===== */
+let suggestTimer = null;
+
+function clearSuggest(){
+  if (!suggestBox) return;
+  suggestBox.innerHTML = "";
+}
+
+function renderSuggest(items){
+  if (!suggestBox) return;
+  suggestBox.innerHTML = "";
+  items.forEach(({ text, coords })=>{
+    const div = document.createElement("div");
+    div.className = "suggest__item";
+    div.textContent = text;
+    div.addEventListener("click", async ()=>{
+      clearSuggest();
+      if (addressInput) addressInput.value = text;
+      if (els.checkoutForm?.elements?.address) els.checkoutForm.elements.address.value = text;
+
+      await ensureMap();
+      ymap.setCenter(coords, 16, { duration: 250 });
+      await setDeliveryPoint(coords[0], coords[1], text, false);
+    });
+    suggestBox.appendChild(div);
+  });
+}
+
+async function suggestAddress(q){
+  const ymaps = await ymapsReady();
+  const res = await ymaps.geocode(q, { results: 6 });
+  const out = [];
+  res.geoObjects.each(obj=>{
+    const text = obj.getAddressLine ? obj.getAddressLine() : (obj.get("text") || "");
+    const coords = obj.geometry.getCoordinates(); // [lat,lng]
+    if (text && coords) out.push({ text, coords });
+  });
+  return out;
+}
+
+/* ===== УМНЕЕ: автогеокод при ручном вводе без выбора подсказки ===== */
+let blurTimer = null;
+
+async function commitAddressFromInput(){
+  if (state.mode !== "delivery") return;
+  const q = (addressInput?.value || "").trim();
+  if (q.length < 5) return;
+
+  try{
+    const ymaps = await ymapsReady();
+    const res = await ymaps.geocode(q, { results: 1 });
+    const first = res.geoObjects.get(0);
+    if (!first) {
+      state.delivery.available = false;
+      state.delivery.price = null;
+      renderTotals();
+      return;
+    }
+
+    const coords = first.geometry.getCoordinates(); // [lat,lng]
+    const text = first.getAddressLine ? first.getAddressLine() : (first.get("text") || q);
+
+    await ensureMap();
+    ymap.setCenter(coords, 16, { duration: 250 });
+    await setDeliveryPoint(coords[0], coords[1], text, false);
+  } catch (e){
+    // молча, но статус обновим
+    state.delivery.available = false;
+    state.delivery.price = null;
+    renderTotals();
+  }
+}
+
 /* ===== Init ===== */
 async function init(){
   // UI events
@@ -517,20 +595,49 @@ async function init(){
   const segBtns = els.checkoutForm.querySelectorAll(".seg__btn");
   segBtns.forEach(b => b.addEventListener("click", ()=> setMode(b.dataset.mode)));
 
-  // address search
-  els.btnSearchAddr.addEventListener("click", async ()=>{
-    try{
-      const q = els.addrSearch.value.trim();
-      if (!q) return;
-      const r = await geocode(q);
-      if (!r) return showToast("Адрес не найден");
-      await ensureMap();
-      ymap.setCenter([r.lat, r.lng], 15, { duration: 250 });
-      await setDeliveryPoint(r.lat, r.lng, r.display, false);
-    }catch(e){
-      showToast("Ошибка поиска адреса");
-    }
-  });
+  // address suggest прямо в поле адреса
+  if (addressInput){
+    addressInput.addEventListener("input", ()=>{
+      const q = addressInput.value.trim();
+      clearTimeout(suggestTimer);
+
+      if (q.length < 3){
+        clearSuggest();
+        return;
+      }
+
+      suggestTimer = setTimeout(async ()=>{
+        try{
+          const items = await suggestAddress(q);
+          renderSuggest(items);
+        }catch{
+          clearSuggest();
+        }
+      }, 250);
+    });
+
+    // автогеокод по blur (если пользователь не выбирал подсказку)
+    addressInput.addEventListener("blur", ()=>{
+      clearTimeout(blurTimer);
+      blurTimer = setTimeout(()=>commitAddressFromInput(), 220);
+    });
+
+    // Enter в поле адреса -> тоже коммитим
+    addressInput.addEventListener("keydown", (e)=>{
+      if (e.key === "Enter"){
+        e.preventDefault();
+        commitAddressFromInput();
+        clearSuggest();
+      }
+    });
+
+    // скрыть подсказки при клике вне
+    document.addEventListener("click", (e)=>{
+      if (e.target === addressInput) return;
+      if (suggestBox && suggestBox.contains(e.target)) return;
+      clearSuggest();
+    });
+  }
 
   // checkout submit
   els.checkoutForm.addEventListener("submit", async (e)=>{
@@ -539,16 +646,21 @@ async function init(){
     if (cartCount() === 0) return showToast("Корзина пуста");
 
     if (state.mode === "delivery"){
-      const addr = els.checkoutForm.elements.address.value.trim();
+      const addr = (els.checkoutForm.elements.address?.value || "").trim();
       if (!addr) return showToast("Укажите адрес доставки");
-      if (typeof state.delivery.price !== "number") return showToast("Точка вне зоны или зоны не настроены");
+
+      if (!state.delivery.available || typeof state.delivery.price !== "number"){
+        return showToast("Доставка по этому адресу недоступна");
+      }
     }
 
     const payload = buildOrderPayload(els.checkoutForm.elements);
 
     const btn = document.getElementById("submitOrder");
-    btn.disabled = true;
-    btn.textContent = "Отправляем…";
+    if (btn){
+      btn.disabled = true;
+      btn.textContent = "Отправляем…";
+    }
 
     try{
       await sendOrder(payload);
@@ -564,8 +676,10 @@ async function init(){
     }catch(err){
       showToast(String(err.message || err));
     }finally{
-      btn.disabled = false;
-      btn.textContent = "Отправить заказ";
+      if (btn){
+        btn.disabled = false;
+        btn.textContent = "Отправить заказ";
+      }
     }
   });
 
