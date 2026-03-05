@@ -109,7 +109,9 @@
         <div class="infoGrid">
           <div class="infoCard">
             <div class="infoCard__title">Самовывоз</div>
-            <div class="infoCard__text">Выбирайте удобную точку для самовывоза из ресторана.</div>
+            <div class="infoCard__text">
+              Выбирайте удобную точку для самовывоза из ресторана.
+            </div>
             <ul class="list">
               <li>Оренбург, Театральная 1/1</li>
               <li>Оренбург, 27 Линия 60</li>
@@ -119,7 +121,9 @@
 
           <div class="infoCard">
             <div class="infoCard__title">Доставка</div>
-            <div class="infoCard__text">Стоимость рассчитывается при оформлении заказа.</div>
+            <div class="infoCard__text">
+              Стоимость доставки определяется при оформлении заказа.
+            </div>
           </div>
 
           <div class="infoCard">
@@ -213,7 +217,7 @@
           <input type="hidden" name="mode" value="delivery">
         </div>
 
-        <!-- Только для Самовывоз -->
+        <!-- Только Самовывоз -->
         <div class="field" id="pickupBlock" hidden>
           <label>Адрес самовывоза</label>
           <select name="pickupAddress">
@@ -223,7 +227,7 @@
           </select>
         </div>
 
-        <!-- Только для Доставка -->
+        <!-- Только Доставка -->
         <div id="deliveryBlock">
           <div class="formGrid">
             <div class="field field--suggest">
@@ -235,7 +239,7 @@
                 autocomplete="off"
               >
               <div id="addressSuggest"></div>
-              <div class="hint">Можно нажать по карте или выбрать из подсказок</div>
+              <div class="hint">Начните вводить адрес и выберите подсказку или нажмите на карту</div>
             </div>
           </div>
 
