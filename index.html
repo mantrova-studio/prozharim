@@ -232,7 +232,8 @@
           <div class="formGrid">
             <div class="field">
               <label>Адрес доставки</label>
-              <input name="address" placeholder="Введите адрес или выберите на карте">
+              <input name="address" id="addressInput" placeholder="Начните вводить адрес..." autocomlete="off">
+              <div id="addressSuggest" class="suggest"></div>
               <div class="hint">Можно нажать по карте или найти по адресу</div>
             </div>
             <!-- <div class="field">
