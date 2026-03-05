@@ -16,7 +16,8 @@
     "desc": "",
     "price": 495,
     "weight": "350 г",
-    "img": "/assets/photos/Шашлык из свинины.jpg"
+    "img": "/assets/photos/Шашлык из свинины.jpg",
+    "hit": true
   },
   {
     "id": "shashlyk-iz-govyadiny",
@@ -25,7 +26,8 @@
     "desc": "",
     "price": 595,
     "weight": "350 г",
-    "img": "/assets/photos/Шашлык из говядины.jpg"
+    "img": "/assets/photos/Шашлык из говядины.jpg",
+    "hit": true
   },
   {
     "id": "svinye-rebryshki-s-sousom",
@@ -34,7 +36,8 @@
     "desc": "",
     "price": 495,
     "weight": "400 г",
-    "img": "/assets/photos/Свиные ребрышки с соусом.jpg"
+    "img": "/assets/photos/Свиные ребрышки с соусом.jpg",
+    "hit": true
   },
   {
     "id": "steyk-myaso-po-frantsuzski",
