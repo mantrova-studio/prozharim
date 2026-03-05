@@ -22,6 +22,7 @@ body{
   background: var(--bg);
   color: var(--txt);
   overflow-x:hidden;
+  padding-top: 76px;
 }
 
 a{color:inherit;text-decoration:none}
@@ -55,11 +56,20 @@ a{color:inherit;text-decoration:none}
 }
 
 .header{
-  position:sticky; top:0; z-index:20;
+  /* Шапка всегда закреплена сверху и не должна исчезать */
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 20;
   background: rgba(6,6,7,.72);
   backdrop-filter: blur(14px);
-  border-bottom:1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+
+  /* страховка от любых "скрывающих" эффектов */
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
+
 .header__row{
   display:flex; align-items:center; justify-content:space-between;
   padding:14px 0;
