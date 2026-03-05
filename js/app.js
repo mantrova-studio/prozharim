@@ -502,7 +502,7 @@ function buildOrderPayload(form){
 async function sendOrder(payload){
   const res = await fetch(ORDER_API_URL, {
     method: "POST",
-    headers: { "Content-Type":"application/json" },
+    headers: { "Content-Type":"application/json", "X-Order-Secret": "pds_sd_prozharim_sushidza_banzai_order_secret"},
     body: JSON.stringify(payload)
   });
   const data = await res.json().catch(()=> ({}));
