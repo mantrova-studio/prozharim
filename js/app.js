@@ -37,8 +37,8 @@ const els = {
   mapInfo: document.getElementById("mapInfo"),
 };
 
-const addressInput = document.getElementById("addressInput");     // input name="address"
-const suggestBox   = document.getElementById("addressSuggest");   // dropdown container
+const addressInput = document.getElementById("addressInput");
+const suggestBox   = document.getElementById("addressSuggest");
 
 const STORAGE_KEY = "prozh_cart_v1";
 
@@ -57,7 +57,7 @@ let state = {
     zone: null,
     restaurant: null,
     price: null,       // number | null
-    available: false,  // true если попали в зону
+    available: false,  // true если в зоне
   }
 };
 
@@ -107,7 +107,6 @@ function openCheckout(){
   els.checkoutModal.classList.add("isOn");
   els.checkoutModal.setAttribute("aria-hidden","false");
   renderTotals();
-
   if (state.mode === "delivery") ensureMap().catch(()=>{});
 }
 function closeCheckout(){
@@ -166,6 +165,7 @@ function renderCart(){
       `;
       row.querySelector('[data-act="dec"]').addEventListener("click", ()=>decFromCart(id));
       row.querySelector('[data-act="inc"]').addEventListener("click", ()=>incFromCart(id));
+
       els.cartItems.appendChild(row);
     }
   }
@@ -326,7 +326,6 @@ function pointInPolygon(point, vs){
 function findZone(lat, lng){
   if (!ZONES) return null;
   const pt = [lng, lat]; // важно: GeoJSON = [lng,lat]
-
   for (const f of ZONES.features || []){
     if (!f.geometry) continue;
 
@@ -341,7 +340,6 @@ function findZone(lat, lng){
       }
     }
   }
-
   return null;
 }
 
@@ -349,9 +347,8 @@ async function setDeliveryPoint(lat, lng, addressStr, doReverse=false){
   state.delivery.lat = lat;
   state.delivery.lng = lng;
 
-  await ymapsReady();
+  const ymaps = await ymapsReady();
 
-  // маркер
   if (!ymarker){
     ymarker = new ymaps.Placemark([lat, lng], {}, { preset: "islands#redDotIcon" });
     ymap.geoObjects.add(ymarker);
@@ -359,8 +356,7 @@ async function setDeliveryPoint(lat, lng, addressStr, doReverse=false){
     ymarker.geometry.setCoordinates([lat, lng]);
   }
 
-  // зона
-  const zone = findZone(lat, lng);
+  const zone = findZone(lat,lng);
   if (!zone){
     state.delivery.zone = null;
     state.delivery.restaurant = null;
@@ -374,7 +370,6 @@ async function setDeliveryPoint(lat, lng, addressStr, doReverse=false){
     state.delivery.available = true;
   }
 
-  // адрес
   if (addressStr){
     state.delivery.address = addressStr;
     if (addressInput) addressInput.value = addressStr;
@@ -419,13 +414,26 @@ function setMode(mode){
   const btns = els.checkoutForm.querySelectorAll(".seg__btn");
   btns.forEach(b => b.classList.toggle("isOn", b.dataset.mode === mode));
 
+  // ЖЁСТКО управляем показом (чтобы точно не было самовывоза при доставке)
   if (mode === "pickup"){
-    if (els.pickupBlock) els.pickupBlock.hidden = false;
-    if (els.deliveryBlock) els.deliveryBlock.hidden = true;
+    if (els.pickupBlock){
+      els.pickupBlock.hidden = false;
+      els.pickupBlock.style.display = "block";
+    }
+    if (els.deliveryBlock){
+      els.deliveryBlock.hidden = true;
+      els.deliveryBlock.style.display = "none";
+    }
   } else {
-    if (els.pickupBlock) els.pickupBlock.hidden = true;
-    if (els.deliveryBlock) els.deliveryBlock.hidden = false;
-    ensureMap();
+    if (els.pickupBlock){
+      els.pickupBlock.hidden = true;
+      els.pickupBlock.style.display = "none";
+    }
+    if (els.deliveryBlock){
+      els.deliveryBlock.hidden = false;
+      els.deliveryBlock.style.display = "block";
+    }
+    ensureMap().catch(()=>{});
   }
 
   renderTotals();
@@ -502,8 +510,9 @@ async function sendOrder(payload){
   return data;
 }
 
-/* ===== Address suggestions in addressInput ===== */
+/* ===== Address suggestions + auto-commit ===== */
 let suggestTimer = null;
+let blurTimer = null;
 
 function clearSuggest(){
   if (!suggestBox) return;
@@ -519,11 +528,11 @@ function renderSuggest(items){
     div.textContent = text;
     div.addEventListener("click", async ()=>{
       clearSuggest();
-      if (addressInput) addressInput.value = text;
-      if (els.checkoutForm?.elements?.address) els.checkoutForm.elements.address.value = text;
+      addressInput.value = text;
+      els.checkoutForm.elements.address.value = text;
 
-      await ensureMap();
-      ymap.setCenter(coords, 16, { duration: 250 });
+      await ensureMap().catch(()=>{});
+      if (ymap) ymap.setCenter(coords, 16, { duration: 250 });
       await setDeliveryPoint(coords[0], coords[1], text, false);
     });
     suggestBox.appendChild(div);
@@ -542,9 +551,6 @@ async function suggestAddress(q){
   return out;
 }
 
-/* ===== УМНЕЕ: автогеокод при ручном вводе без выбора подсказки ===== */
-let blurTimer = null;
-
 async function commitAddressFromInput(){
   if (state.mode !== "delivery") return;
   const q = (addressInput?.value || "").trim();
@@ -554,7 +560,7 @@ async function commitAddressFromInput(){
     const ymaps = await ymapsReady();
     const res = await ymaps.geocode(q, { results: 1 });
     const first = res.geoObjects.get(0);
-    if (!first) {
+    if (!first){
       state.delivery.available = false;
       state.delivery.price = null;
       renderTotals();
@@ -564,15 +570,38 @@ async function commitAddressFromInput(){
     const coords = first.geometry.getCoordinates(); // [lat,lng]
     const text = first.getAddressLine ? first.getAddressLine() : (first.get("text") || q);
 
-    await ensureMap();
-    ymap.setCenter(coords, 16, { duration: 250 });
+    await ensureMap().catch(()=>{});
+    if (ymap) ymap.setCenter(coords, 16, { duration: 250 });
     await setDeliveryPoint(coords[0], coords[1], text, false);
-  } catch (e){
-    // молча, но статус обновим
+  }catch{
     state.delivery.available = false;
     state.delivery.price = null;
     renderTotals();
   }
+}
+
+/* ===== Success UI ===== */
+function showCheckoutSuccess(){
+  els.checkoutForm.innerHTML = `
+    <div style="display:grid; place-items:center; gap:14px; padding:26px 10px; text-align:center;">
+      <div style="
+        width:72px;height:72px;border-radius:999px;
+        display:grid;place-items:center;
+        border:1px solid rgba(255,255,255,.14);
+        background: rgba(255,255,255,.04);
+        box-shadow: 0 18px 55px rgba(0,0,0,.45);
+        font-size:34px;
+      ">✅</div>
+      <div style="font-weight:950; font-size:18px;">Заказ оформлен!</div>
+      <div style="color:rgba(243,243,244,.72); max-width:52ch;">
+        Ожидайте звонка от оператора для подтверждения заказа.
+      </div>
+      <button class="btn btn--primary w100" type="button" id="closeSuccessBtn">Закрыть</button>
+    </div>
+  `;
+
+  const btn = document.getElementById("closeSuccessBtn");
+  if (btn) btn.addEventListener("click", closeCheckout);
 }
 
 /* ===== Init ===== */
@@ -595,8 +624,8 @@ async function init(){
   const segBtns = els.checkoutForm.querySelectorAll(".seg__btn");
   segBtns.forEach(b => b.addEventListener("click", ()=> setMode(b.dataset.mode)));
 
-  // address suggest прямо в поле адреса
-  if (addressInput){
+  // подсказки адреса
+  if (addressInput && suggestBox){
     addressInput.addEventListener("input", ()=>{
       const q = addressInput.value.trim();
       clearTimeout(suggestTimer);
@@ -616,13 +645,11 @@ async function init(){
       }, 250);
     });
 
-    // автогеокод по blur (если пользователь не выбирал подсказку)
     addressInput.addEventListener("blur", ()=>{
       clearTimeout(blurTimer);
       blurTimer = setTimeout(()=>commitAddressFromInput(), 220);
     });
 
-    // Enter в поле адреса -> тоже коммитим
     addressInput.addEventListener("keydown", (e)=>{
       if (e.key === "Enter"){
         e.preventDefault();
@@ -631,10 +658,9 @@ async function init(){
       }
     });
 
-    // скрыть подсказки при клике вне
     document.addEventListener("click", (e)=>{
       if (e.target === addressInput) return;
-      if (suggestBox && suggestBox.contains(e.target)) return;
+      if (suggestBox.contains(e.target)) return;
       clearSuggest();
     });
   }
@@ -648,7 +674,6 @@ async function init(){
     if (state.mode === "delivery"){
       const addr = (els.checkoutForm.elements.address?.value || "").trim();
       if (!addr) return showToast("Укажите адрес доставки");
-
       if (!state.delivery.available || typeof state.delivery.price !== "number"){
         return showToast("Доставка по этому адресу недоступна");
       }
@@ -664,7 +689,6 @@ async function init(){
 
     try{
       await sendOrder(payload);
-      showToast("Заказ отправлен ✅");
 
       // clear cart
       state.cart = {};
@@ -672,10 +696,11 @@ async function init(){
       renderCart();
       renderTotals();
 
-      setTimeout(()=> closeCheckout(), 700);
+      // success screen (в этом окне)
+      showCheckoutSuccess();
+
     }catch(err){
       showToast(String(err.message || err));
-    }finally{
       if (btn){
         btn.disabled = false;
         btn.textContent = "Отправить заказ";
