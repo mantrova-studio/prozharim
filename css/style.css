@@ -409,7 +409,7 @@ input:focus,select:focus{border-color: rgba(255,43,43,.45)}
 
 .footer{margin-top:22px}
 .footer__line{height:1px; background: rgba(255,255,255,.08); margin:14px 0}
-.footer__row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.footer__row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; font-size:12px}
 .muted{color:var(--muted)}
 
 .toast{
@@ -423,4 +423,5 @@ input:focus,select:focus{border-color: rgba(255,43,43,.45)}
 }
 
 .toast.isOn{display:block}
+
 
