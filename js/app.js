@@ -5,7 +5,6 @@
 */
 
 const ORDER_API_URL = "https://YOUR-WORKER-URL.example.workers.dev/order"; // <-- заменишь
-const STORAGE_KEY = "prozharim_local_v1";
 
 const els = {
   products: document.getElementById("products"),
@@ -41,7 +40,7 @@ const els = {
 const addressInput = document.getElementById("addressInput");
 const suggestBox   = document.getElementById("addressSuggest");
 
-const STORAGE_KEY = "prozh_cart_v1";
+const STORAGE_KEY = "prozharim_local_v1";
 
 let MENU = [];
 let ZONES = null;
