@@ -502,9 +502,13 @@ function buildOrderPayload(form){
 async function sendOrder(payload){
   const res = await fetch(ORDER_API_URL, {
     method: "POST",
-    headers: { "Content-Type":"application/json", "X-Order-Secret": "sytnay_dostavka_prozharim_secret_teatralnaya_liniya_kichigina_order_new"},
+    headers: {
+      "Content-Type": "application/json",
+      "X-Client-Key": "sytnay_dostavka_prozharim_secret_teatralnaya_liniya_kichigina_order_new"
+    },
     body: JSON.stringify(payload)
   });
+
   const data = await res.json().catch(()=> ({}));
   if (!res.ok) throw new Error(data?.error || "Ошибка отправки");
   return data;
