@@ -239,22 +239,22 @@
                 autocomplete="off"
               >
               <div id="addressSuggest"></div>
-              <div class="hint">Начните вводить адрес и выберите подсказку или нажмите на карту</div>
+              <!--<div class="hint">Начните вводить адрес и выберите подсказку или нажмите на карту</div>-->
             </div>
           </div>
 
           <div class="formGrid formGrid--3">
             <div class="field">
-              <label>Подъезд (необязательно)</label>
-              <input name="entrance" placeholder="Напр. 2">
+              <label>Подъезд</label>
+              <input name="entrance" placeholder="...">
             </div>
             <div class="field">
-              <label>Этаж (необязательно)</label>
-              <input name="floor" placeholder="Напр. 5">
+              <label>Этаж</label>
+              <input name="floor" placeholder="...">
             </div>
             <div class="field">
-              <label>Квартира (необязательно)</label>
-              <input name="flat" placeholder="Напр. 48">
+              <label>Квартира</label>
+              <input name="flat" placeholder="...">
             </div>
           </div>
 
@@ -269,7 +269,7 @@
             <label>Оплата</label>
             <select name="payment">
               <option value="cash">Наличными</option>
-              <option value="card">Картой курьеру</option>
+              <option value="card">Картой при получении</option>
             </select>
           </div>
           <div class="field">
@@ -288,7 +288,7 @@
           <div class="totalRow totalRow--grand">
             <span>Итого</span><b id="sumTotal">0 ₽</b>
           </div>
-          <div class="muted small">После отправки заказ улетит в Telegram оператору.</div>
+          <!--<div class="muted small">После отправки заказ улетит в Telegram оператору.</div>-->
         </div>
 
         <button class="btn btn--primary w100" type="submit" id="submitOrder">
