@@ -368,6 +368,31 @@ function setupPhoneMask() {
 
 
 function setupWhenSelector(){
+  const btns = document.querySelectorAll("[data-time]");
+  const timeBlock = document.getElementById("timeBlock");
+  const whenTypeInput = els.checkoutForm?.elements?.whenType;
+
+  btns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      btns.forEach(b => b.classList.remove("isOn"));
+      btn.classList.add("isOn");
+
+      const type = btn.dataset.time;
+
+      state.when.type = type;
+      if (whenTypeInput) whenTypeInput.value = type;
+
+      if (timeBlock) {
+        timeBlock.hidden = type !== "later";
+        timeBlock.style.display = type === "later" ? "block" : "none";
+      }
+    });
+  });
+}
+
+/* ===== Delivery: Yandex map + zones ===== */
+let ymap = null;
+let ymarker = null;
 
 
 /* ===== Delivery: Yandex map + zones ===== */
@@ -773,7 +798,7 @@ async function init(){
   setupPhoneMask();
   setupWhenSelector();
 
-  const segBtns = els.checkoutForm.querySelectorAll(".seg__btn");
+  const segBtns = els.checkoutForm.querySelectorAll(".seg__btn[data-mode]");
   segBtns.forEach(b => b.addEventListener("click", ()=> setMode(b.dataset.mode)));
 
   if (addressInput && suggestBox){
