@@ -4,7 +4,7 @@
    Отправка заказа: через API (Cloudflare Worker / Netlify Function)
 */
 
-const ORDER_API_URL = "https://prozharim-oreder-api.polihov-alexey-a.workers.dev"; // <-- заменишь
+const ORDER_API_URL = "https://prozharim-oreder-api.polihov-alexey-a.workers.dev";
 
 const els = {
   products: document.getElementById("products"),
@@ -35,6 +35,7 @@ const els = {
   toast: document.getElementById("toast"),
 
   mapInfo: document.getElementById("mapInfo"),
+  phoneInput: document.getElementById("phoneInput") || document.querySelector('input[name="phone"]'),
 };
 
 const addressInput = document.getElementById("addressInput");
@@ -56,8 +57,8 @@ let state = {
     address: "",
     zone: null,
     restaurant: null,
-    price: null,       // number | null
-    available: false,  // true если в зоне
+    price: null,
+    available: false,
   }
 };
 
@@ -261,6 +262,105 @@ function renderHits(){
   }
 }
 
+/* ===== Phone mask ===== */
+function setupPhoneMask() {
+  const input = els.phoneInput;
+  if (!input) return;
+
+  input.setAttribute("inputmode", "numeric");
+  input.setAttribute("autocomplete", "tel");
+  input.setAttribute("maxlength", "12");
+  if (!input.placeholder) input.placeholder = "+79999999999";
+
+  const normalizePhone = (raw) => {
+    let digits = String(raw || "").replace(/\D/g, "");
+
+    if (digits.startsWith("8")) digits = "7" + digits.slice(1);
+    if (digits.startsWith("9")) digits = "7" + digits;
+    if (!digits.startsWith("7")) digits = "7" + digits;
+
+    digits = digits.slice(0, 11);
+
+    return "+" + digits;
+  };
+
+  const setToEnd = () => {
+    try {
+      const pos = input.value.length;
+      input.setSelectionRange(pos, pos);
+    } catch {}
+  };
+
+  const fixValue = () => {
+    input.value = normalizePhone(input.value);
+    if (input.value.length < 2) input.value = "+7";
+
+    requestAnimationFrame(() => {
+      const start = input.selectionStart ?? input.value.length;
+      const end = input.selectionEnd ?? input.value.length;
+
+      if (start < 2 || end < 2) {
+        setToEnd();
+      }
+    });
+  };
+
+  if (!input.value || input.value === "+") {
+    input.value = "+7";
+  } else {
+    input.value = normalizePhone(input.value);
+  }
+
+  input.addEventListener("focus", () => {
+    if (!input.value || input.value.length < 2) {
+      input.value = "+7";
+    }
+    setToEnd();
+  });
+
+  input.addEventListener("input", fixValue);
+
+  input.addEventListener("click", () => {
+    if ((input.selectionStart ?? 0) < 2) setToEnd();
+  });
+
+  input.addEventListener("keydown", (e) => {
+    const start = input.selectionStart ?? 0;
+    const end = input.selectionEnd ?? 0;
+
+    if (
+      (e.key === "Backspace" && start <= 2) ||
+      (e.key === "Delete" && start < 2) ||
+      (e.key === "ArrowLeft" && start <= 2) ||
+      (e.key === "Home")
+    ) {
+      e.preventDefault();
+      setToEnd();
+      return;
+    }
+
+    if (e.key.length === 1 && /\D/.test(e.key) && !e.ctrlKey && !e.metaKey) {
+      e.preventDefault();
+      return;
+    }
+
+    if (start < 2 && end < 2) {
+      requestAnimationFrame(setToEnd);
+    }
+  });
+
+  input.addEventListener("paste", (e) => {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData("text");
+    input.value = normalizePhone(text);
+    setToEnd();
+  });
+
+  input.addEventListener("blur", () => {
+    if (!input.value || input.value === "+") input.value = "+7";
+  });
+}
+
 /* ===== Delivery: Yandex map + zones ===== */
 let ymap = null;
 let ymarker = null;
@@ -282,7 +382,7 @@ function ymapsReady(){
 async function ensureMap(){
   if (ymap) return;
   const ymaps = await ymapsReady();
-  const center = [51.7682, 55.0968]; // Оренбург (lat, lng)
+  const center = [51.7682, 55.0968];
 
   ymap = new ymaps.Map("map", {
     center,
@@ -292,10 +392,8 @@ async function ensureMap(){
     suppressMapOpenBlock: true
   });
 
-  // Полигоны НЕ рисуем — клиент не видит зоны
-
   ymap.events.add("click", async (e)=>{
-    const coords = e.get("coords"); // [lat,lng]
+    const coords = e.get("coords");
     await setDeliveryPoint(coords[0], coords[1], null, true);
   });
 }
@@ -308,7 +406,6 @@ async function reverseGeocode(lat, lng){
   return first.getAddressLine ? first.getAddressLine() : (first.get("text") || "");
 }
 
-// point-in-polygon (ray casting), GeoJSON coords: [lng,lat]
 function pointInPolygon(point, vs){
   const x = point[0], y = point[1];
   let inside = false;
@@ -325,7 +422,7 @@ function pointInPolygon(point, vs){
 
 function findZone(lat, lng){
   if (!ZONES) return null;
-  const pt = [lng, lat]; // важно: GeoJSON = [lng,lat]
+  const pt = [lng, lat];
   for (const f of ZONES.features || []){
     if (!f.geometry) continue;
 
@@ -414,7 +511,6 @@ function setMode(mode){
   const btns = els.checkoutForm.querySelectorAll(".seg__btn");
   btns.forEach(b => b.classList.toggle("isOn", b.dataset.mode === mode));
 
-  // ЖЁСТКО управляем показом (чтобы точно не было самовывоза при доставке)
   if (mode === "pickup"){
     if (els.pickupBlock){
       els.pickupBlock.hidden = false;
@@ -560,7 +656,7 @@ async function suggestAddress(q){
   const out = [];
   res.geoObjects.each(obj=>{
     const text = obj.getAddressLine ? obj.getAddressLine() : (obj.get("text") || "");
-    const coords = obj.geometry.getCoordinates(); // [lat,lng]
+    const coords = obj.geometry.getCoordinates();
     if (text && coords) out.push({ text, coords });
   });
   return out;
@@ -582,7 +678,7 @@ async function commitAddressFromInput(){
       return;
     }
 
-    const coords = first.geometry.getCoordinates(); // [lat,lng]
+    const coords = first.geometry.getCoordinates();
     const text = first.getAddressLine ? first.getAddressLine() : (first.get("text") || q);
 
     await ensureMap().catch(()=>{});
@@ -621,7 +717,6 @@ function showCheckoutSuccess(){
 
 /* ===== Init ===== */
 async function init(){
-  // UI events
   els.openCart.addEventListener("click", openDrawer);
   els.closeCart.addEventListener("click", closeDrawer);
   els.closeCart2.addEventListener("click", closeDrawer);
@@ -635,11 +730,11 @@ async function init(){
     renderProducts();
   });
 
-  // mode buttons
+  setupPhoneMask();
+
   const segBtns = els.checkoutForm.querySelectorAll(".seg__btn");
   segBtns.forEach(b => b.addEventListener("click", ()=> setMode(b.dataset.mode)));
 
-  // подсказки адреса
   if (addressInput && suggestBox){
     addressInput.addEventListener("input", ()=>{
       const q = addressInput.value.trim();
@@ -680,11 +775,15 @@ async function init(){
     });
   }
 
-  // checkout submit
   els.checkoutForm.addEventListener("submit", async (e)=>{
     e.preventDefault();
 
     if (cartCount() === 0) return showToast("Корзина пуста");
+
+    const phone = (els.checkoutForm.elements.phone?.value || "").trim();
+    if (!/^\+7\d{10}$/.test(phone)) {
+      return showToast("Введите телефон в формате +79999999999");
+    }
 
     if (state.mode === "delivery"){
       const addr = (els.checkoutForm.elements.address?.value || "").trim();
@@ -705,13 +804,11 @@ async function init(){
     try{
       await sendOrder(payload);
 
-      // clear cart
       state.cart = {};
       saveCart();
       renderCart();
       renderTotals();
 
-      // success screen (в этом окне)
       showCheckoutSuccess();
 
     }catch(err){
@@ -723,7 +820,6 @@ async function init(){
     }
   });
 
-  // Load data
   MENU = await fetch("data/menu.json").then(r=>r.json());
   ZONES = await fetch("data/zones.geojson").then(r=>r.json()).catch(()=>null);
 
@@ -733,7 +829,6 @@ async function init(){
   renderCartBadge();
   renderTotals();
 
-  // default mode
   setMode("delivery");
 }
 
