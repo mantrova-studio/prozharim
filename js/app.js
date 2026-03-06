@@ -510,7 +510,18 @@ async function sendOrder(payload){
   });
 
   const data = await res.json().catch(()=> ({}));
-  if (!res.ok) throw new Error(data?.error || "Ошибка отправки");
+
+  console.log("WORKER RESPONSE:", data);
+
+  if (!res.ok) {
+    throw new Error(
+      data?.details?.description ||
+      data?.details?.error_code ||
+      data?.error ||
+      "Ошибка отправки"
+    );
+  }
+
   return data;
 }
 
