@@ -368,34 +368,7 @@ function setupPhoneMask() {
 
 
 function setupWhenSelector(){
-  const btns = els.checkoutForm.querySelectorAll("[data-time]");
-  const timeInput = els.checkoutForm.elements.whenDate;
 
-  const update = (type) => {
-    state.when.type = type;
-    els.checkoutForm.elements.whenType.value = type;
-    btns.forEach((b) => b.classList.toggle("isOn", b.dataset.time === type));
-    if (els.timeBlock) els.timeBlock.hidden = type !== "later";
-    if (type !== "later" && timeInput) timeInput.value = "";
-  };
-
-  btns.forEach((btn) => {
-    btn.addEventListener("click", () => update(btn.dataset.time));
-  });
-
-  if (timeInput) {
-    const now = new Date();
-    now.setMinutes(now.getMinutes() + 30);
-    now.setSeconds(0, 0);
-    const mins = now.getMinutes();
-    const rounded = mins % 5 === 0 ? now : new Date(now.getTime() + (5 - mins % 5) * 60000);
-    const pad = (n) => String(n).padStart(2, "0");
-    timeInput.min = `${rounded.getFullYear()}-${pad(rounded.getMonth()+1)}-${pad(rounded.getDate())}T${pad(rounded.getHours())}:${pad(rounded.getMinutes())}`;
-    timeInput.step = 300;
-  }
-
-  update("now");
-}
 
 /* ===== Delivery: Yandex map + zones ===== */
 let ymap = null;
@@ -404,7 +377,27 @@ let ymarker = null;
 function ymapsReady(){
   return new Promise((resolve, reject)=>{
     const start = Date.now();
-    (function wait(){
+    (function setupWhenSelector(){
+  const btns = document.querySelectorAll("[data-time]");
+  const timeBlock = document.getElementById("timeBlock");
+  const whenTypeInput = els.checkoutForm?.elements?.whenType;
+
+  btns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      btns.forEach(b => b.classList.remove("isOn"));
+      btn.classList.add("isOn");
+
+      const type = btn.dataset.time;
+
+      state.when.type = type;
+      if (whenTypeInput) whenTypeInput.value = type;
+
+      if (timeBlock) {
+        timeBlock.style.display = type === "later" ? "block" : "none";
+      }
+    });
+  });
+    }function wait(){
       if (window.ymaps && typeof window.ymaps.ready === "function"){
         window.ymaps.ready(()=>resolve(window.ymaps));
         return;
@@ -544,7 +537,7 @@ function setMode(mode){
   state.mode = mode;
   els.checkoutForm.elements.mode.value = mode;
 
-  const btns = els.checkoutForm.querySelectorAll(".seg__btn");
+  const btns = els.checkoutForm.querySelectorAll(".seg__btn[data-mode]");
   btns.forEach(b => b.classList.toggle("isOn", b.dataset.mode === mode));
 
   if (mode === "pickup"){
