@@ -6,7 +6,7 @@
       "properties": {
         "zone": "A",
         "restaurant": "Театральная 1/1",
-        "deliveryPrice": 150
+        "deliveryPrice": 500
       },
       "geometry": {
         "type": "Polygon",
@@ -26,4 +26,5 @@
       }
     }
   ]
+
 }
