@@ -40,7 +40,7 @@ const els = {
 };
 
 const addressInput = document.getElementById("addressInput");
-const suggestBox   = document.getElementById("addressSuggest");
+const suggestBox = document.getElementById("addressSuggest");
 
 const STORAGE_KEY = "prozharim_local_v1";
 
@@ -70,27 +70,36 @@ let state = {
 function rub(n){ return `${Math.round(n)} ₽`; }
 
 function showToast(msg){
-  if (!els.toast) { alert(msg); return; }
+  if (!els.toast) {
+    alert(msg);
+    return;
+  }
   els.toast.textContent = msg;
   els.toast.classList.add("isOn");
-  setTimeout(()=>els.toast.classList.remove("isOn"), 2600);
+  setTimeout(() => els.toast.classList.remove("isOn"), 2600);
 }
 
 function loadCart(){
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
-  catch { return {}; }
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+  } catch {
+    return {};
+  }
 }
+
 function saveCart(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state.cart));
   renderCartBadge();
 }
+
 function cartCount(){
-  return Object.values(state.cart).reduce((a,b)=>a+b,0);
+  return Object.values(state.cart).reduce((a, b) => a + b, 0);
 }
+
 function cartSum(){
   let sum = 0;
   for (const [id, qty] of Object.entries(state.cart)){
-    const p = MENU.find(x=>x.id===id);
+    const p = MENU.find(x => x.id === id);
     if (p) sum += p.price * qty;
   }
   return sum;
@@ -98,26 +107,29 @@ function cartSum(){
 
 function openDrawer(){
   els.cartDrawer.classList.add("isOn");
-  els.cartDrawer.setAttribute("aria-hidden","false");
+  els.cartDrawer.setAttribute("aria-hidden", "false");
   renderCart();
 }
+
 function closeDrawer(){
   els.cartDrawer.classList.remove("isOn");
-  els.cartDrawer.setAttribute("aria-hidden","true");
+  els.cartDrawer.setAttribute("aria-hidden", "true");
 }
+
 function openCheckout(){
   if (cartCount() === 0){
     showToast("Корзина пуста");
     return;
   }
   els.checkoutModal.classList.add("isOn");
-  els.checkoutModal.setAttribute("aria-hidden","false");
+  els.checkoutModal.setAttribute("aria-hidden", "false");
   renderTotals();
-  if (state.mode === "delivery") ensureMap().catch(()=>{});
+  if (state.mode === "delivery") ensureMap().catch(() => {});
 }
+
 function closeCheckout(){
   els.checkoutModal.classList.remove("isOn");
-  els.checkoutModal.setAttribute("aria-hidden","true");
+  els.checkoutModal.setAttribute("aria-hidden", "true");
 }
 
 function renderCartBadge(){
@@ -129,6 +141,7 @@ function addToCart(id){
   saveCart();
   showToast("Добавлено в корзину");
 }
+
 function decFromCart(id){
   if (!state.cart[id]) return;
   state.cart[id] -= 1;
@@ -137,6 +150,7 @@ function decFromCart(id){
   renderCart();
   renderTotals();
 }
+
 function incFromCart(id){
   state.cart[id] = (state.cart[id] || 0) + 1;
   saveCart();
@@ -147,11 +161,12 @@ function incFromCart(id){
 function renderCart(){
   els.cartItems.innerHTML = "";
   const ids = Object.keys(state.cart);
+
   if (ids.length === 0){
     els.cartItems.innerHTML = `<div class="muted">Корзина пуста. Выберите блюда в каталоге.</div>`;
   } else {
     for (const id of ids){
-      const p = MENU.find(x=>x.id===id);
+      const p = MENU.find(x => x.id === id);
       if (!p) continue;
       const qty = state.cart[id];
 
@@ -169,18 +184,23 @@ function renderCart(){
           <button type="button" data-act="inc">+</button>
         </div>
       `;
-      row.querySelector('[data-act="dec"]').addEventListener("click", ()=>decFromCart(id));
-      row.querySelector('[data-act="inc"]').addEventListener("click", ()=>incFromCart(id));
+      row.querySelector('[data-act="dec"]').addEventListener("click", () => decFromCart(id));
+      row.querySelector('[data-act="inc"]').addEventListener("click", () => incFromCart(id));
 
       els.cartItems.appendChild(row);
     }
   }
+
   els.cartSubtotal.textContent = rub(cartSum());
 }
 
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
   }[m]));
 }
 
@@ -202,19 +222,20 @@ function makeCard(p){
       </div>
     </div>
   `;
-  el.querySelector("button").addEventListener("click", ()=>addToCart(p.id));
+  el.querySelector("button").addEventListener("click", () => addToCart(p.id));
   return el;
 }
 
 function renderTabs(){
-  const cats = ["Все", ...Array.from(new Set(MENU.map(x=>x.category)))];
+  const cats = ["Все", ...Array.from(new Set(MENU.map(x => x.category)))];
   els.tabs.innerHTML = "";
+
   for (const c of cats){
     const b = document.createElement("button");
     b.className = "tab" + (c === state.category ? " isOn" : "");
     b.type = "button";
     b.textContent = c;
-    b.addEventListener("click", ()=>{
+    b.addEventListener("click", () => {
       state.category = c;
       renderTabs();
       renderProducts();
@@ -228,13 +249,14 @@ function renderProducts(){
   let list = MENU.slice();
 
   if (state.category !== "Все"){
-    list = list.filter(x=>x.category === state.category);
+    list = list.filter(x => x.category === state.category);
   }
+
   if (q){
     list = list.filter(x =>
-      (x.name||"").toLowerCase().includes(q) ||
-      (x.desc||"").toLowerCase().includes(q) ||
-      (x.category||"").toLowerCase().includes(q)
+      (x.name || "").toLowerCase().includes(q) ||
+      (x.desc || "").toLowerCase().includes(q) ||
+      (x.category || "").toLowerCase().includes(q)
     );
   }
 
@@ -245,11 +267,13 @@ function renderProducts(){
 }
 
 function renderHits(){
-  const hits = MENU.filter(x=>x.hit).slice(0,4);
+  const hits = MENU.filter(x => x.hit).slice(0, 4);
+
   if (!hits.length){
     els.hits.innerHTML = `<div class="muted">Добавь пометку "hit": true в menu.json</div>`;
     return;
   }
+
   els.hits.innerHTML = "";
   for (const p of hits){
     const it = document.createElement("div");
@@ -258,11 +282,11 @@ function renderHits(){
       <img src="${p.img}" alt="">
       <div>
         <div class="cartItem__name">${escapeHtml(p.name)}</div>
-        <div class="cartItem__meta">${rub(p.price)} • ${escapeHtml(p.weight||"")}</div>
+        <div class="cartItem__meta">${rub(p.price)} • ${escapeHtml(p.weight || "")}</div>
       </div>
       <div><button class="btn btn--primary" type="button">+</button></div>
     `;
-    it.querySelector("button").addEventListener("click", ()=>addToCart(p.id));
+    it.querySelector("button").addEventListener("click", () => addToCart(p.id));
     els.hits.appendChild(it);
   }
 }
@@ -366,7 +390,6 @@ function setupPhoneMask() {
   });
 }
 
-
 function setupWhenSelector(){
   const btns = document.querySelectorAll("[data-time]");
   const timeBlock = document.getElementById("timeBlock");
@@ -394,40 +417,21 @@ function setupWhenSelector(){
 let ymap = null;
 let ymarker = null;
 
-
-/* ===== Delivery: Yandex map + zones ===== */
-let ymap = null;
-let ymarker = null;
-
 function ymapsReady(){
-  return new Promise((resolve, reject)=>{
+  return new Promise((resolve, reject) => {
     const start = Date.now();
-    (function setupWhenSelector(){
-  const btns = document.querySelectorAll("[data-time]");
-  const timeBlock = document.getElementById("timeBlock");
-  const whenTypeInput = els.checkoutForm?.elements?.whenType;
 
-  btns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      btns.forEach(b => b.classList.remove("isOn"));
-      btn.classList.add("isOn");
-
-      const type = btn.dataset.time;
-
-      state.when.type = type;
-      if (whenTypeInput) whenTypeInput.value = type;
-
-      if (timeBlock) {
-        timeBlock.style.display = type === "later" ? "block" : "none";
-      }
-    });
-  });
-    }function wait(){
+    (function wait(){
       if (window.ymaps && typeof window.ymaps.ready === "function"){
-        window.ymaps.ready(()=>resolve(window.ymaps));
+        window.ymaps.ready(() => resolve(window.ymaps));
         return;
       }
-      if (Date.now() - start > 20000) return reject(new Error("Yandex Maps не загрузилась"));
+
+      if (Date.now() - start > 20000){
+        reject(new Error("Yandex Maps не загрузилась"));
+        return;
+      }
+
       setTimeout(wait, 50);
     })();
   });
@@ -446,7 +450,7 @@ async function ensureMap(){
     suppressMapOpenBlock: true
   });
 
-  ymap.events.add("click", async (e)=>{
+  ymap.events.add("click", async (e) => {
     const coords = e.get("coords");
     await setDeliveryPoint(coords[0], coords[1], null, true);
   });
@@ -463,12 +467,14 @@ async function reverseGeocode(lat, lng){
 function pointInPolygon(point, vs){
   const x = point[0], y = point[1];
   let inside = false;
-  for (let i=0, j=vs.length-1; i<vs.length; j=i++){
+
+  for (let i = 0, j = vs.length - 1; i < vs.length; j = i++){
     const xi = vs[i][0], yi = vs[i][1];
     const xj = vs[j][0], yj = vs[j][1];
 
     const intersect = ((yi > y) !== (yj > y)) &&
       (x < (xj - xi) * (y - yi) / ((yj - yi) || 1e-12) + xi);
+
     if (intersect) inside = !inside;
   }
   return inside;
@@ -477,6 +483,7 @@ function pointInPolygon(point, vs){
 function findZone(lat, lng){
   if (!ZONES) return null;
   const pt = [lng, lat];
+
   for (const f of ZONES.features || []){
     if (!f.geometry) continue;
 
@@ -491,10 +498,11 @@ function findZone(lat, lng){
       }
     }
   }
+
   return null;
 }
 
-async function setDeliveryPoint(lat, lng, addressStr, doReverse=false){
+async function setDeliveryPoint(lat, lng, addressStr, doReverse = false){
   state.delivery.lat = lat;
   state.delivery.lng = lng;
 
@@ -507,7 +515,7 @@ async function setDeliveryPoint(lat, lng, addressStr, doReverse=false){
     ymarker.geometry.setCoordinates([lat, lng]);
   }
 
-  const zone = findZone(lat,lng);
+  const zone = findZone(lat, lng);
   if (!zone){
     state.delivery.zone = null;
     state.delivery.restaurant = null;
@@ -526,14 +534,14 @@ async function setDeliveryPoint(lat, lng, addressStr, doReverse=false){
     if (addressInput) addressInput.value = addressStr;
     if (els.checkoutForm?.elements?.address) els.checkoutForm.elements.address.value = addressStr;
   } else if (doReverse){
-    try{
+    try {
       const a = await reverseGeocode(lat, lng);
       if (a){
         state.delivery.address = a;
         if (addressInput) addressInput.value = a;
         if (els.checkoutForm?.elements?.address) els.checkoutForm.elements.address.value = a;
       }
-    }catch{}
+    } catch {}
   }
 
   renderTotals();
@@ -583,7 +591,7 @@ function setMode(mode){
       els.deliveryBlock.hidden = false;
       els.deliveryBlock.style.display = "block";
     }
-    ensureMap().catch(()=>{});
+    ensureMap().catch(() => {});
   }
 
   renderTotals();
@@ -591,8 +599,8 @@ function setMode(mode){
 
 /* ===== Submit order ===== */
 function buildOrderPayload(form){
-  const items = Object.entries(state.cart).map(([id, qty])=>{
-    const p = MENU.find(x=>x.id===id);
+  const items = Object.entries(state.cart).map(([id, qty]) => {
+    const p = MENU.find(x => x.id === id);
     return {
       id,
       name: p?.name || id,
@@ -603,7 +611,7 @@ function buildOrderPayload(form){
     };
   });
 
-  const subtotal = items.reduce((a,b)=>a+b.sum,0);
+  const subtotal = items.reduce((a, b) => a + b.sum, 0);
 
   let delivery = {
     type: "pickup",
@@ -670,7 +678,7 @@ async function sendOrder(payload){
     body: JSON.stringify(payload)
   });
 
-  const data = await res.json().catch(()=> ({}));
+  const data = await res.json().catch(() => ({}));
 
   console.log("WORKER RESPONSE:", data);
 
@@ -698,16 +706,17 @@ function clearSuggest(){
 function renderSuggest(items){
   if (!suggestBox) return;
   suggestBox.innerHTML = "";
-  items.forEach(({ text, coords })=>{
+
+  items.forEach(({ text, coords }) => {
     const div = document.createElement("div");
     div.className = "suggest__item";
     div.textContent = text;
-    div.addEventListener("click", async ()=>{
+    div.addEventListener("click", async () => {
       clearSuggest();
       addressInput.value = text;
       els.checkoutForm.elements.address.value = text;
 
-      await ensureMap().catch(()=>{});
+      await ensureMap().catch(() => {});
       if (ymap) ymap.setCenter(coords, 16, { duration: 250 });
       await setDeliveryPoint(coords[0], coords[1], text, false);
     });
@@ -719,11 +728,13 @@ async function suggestAddress(q){
   const ymaps = await ymapsReady();
   const res = await ymaps.geocode(q, { results: 6 });
   const out = [];
-  res.geoObjects.each(obj=>{
+
+  res.geoObjects.each(obj => {
     const text = obj.getAddressLine ? obj.getAddressLine() : (obj.get("text") || "");
     const coords = obj.geometry.getCoordinates();
     if (text && coords) out.push({ text, coords });
   });
+
   return out;
 }
 
@@ -732,10 +743,11 @@ async function commitAddressFromInput(){
   const q = (addressInput?.value || "").trim();
   if (q.length < 5) return;
 
-  try{
+  try {
     const ymaps = await ymapsReady();
     const res = await ymaps.geocode(q, { results: 1 });
     const first = res.geoObjects.get(0);
+
     if (!first){
       state.delivery.available = false;
       state.delivery.price = null;
@@ -746,10 +758,10 @@ async function commitAddressFromInput(){
     const coords = first.geometry.getCoordinates();
     const text = first.getAddressLine ? first.getAddressLine() : (first.get("text") || q);
 
-    await ensureMap().catch(()=>{});
+    await ensureMap().catch(() => {});
     if (ymap) ymap.setCenter(coords, 16, { duration: 250 });
     await setDeliveryPoint(coords[0], coords[1], text, false);
-  }catch{
+  } catch {
     state.delivery.available = false;
     state.delivery.price = null;
     renderTotals();
@@ -785,12 +797,12 @@ async function init(){
   els.openCart.addEventListener("click", openDrawer);
   els.closeCart.addEventListener("click", closeDrawer);
   els.closeCart2.addEventListener("click", closeDrawer);
-  els.goCheckout.addEventListener("click", ()=>{ closeDrawer(); openCheckout(); });
+  els.goCheckout.addEventListener("click", () => { closeDrawer(); openCheckout(); });
 
   els.closeCheckout.addEventListener("click", closeCheckout);
   els.closeCheckout2.addEventListener("click", closeCheckout);
 
-  els.search.addEventListener("input", (e)=>{
+  els.search.addEventListener("input", (e) => {
     state.query = e.target.value || "";
     renderProducts();
   });
@@ -799,10 +811,10 @@ async function init(){
   setupWhenSelector();
 
   const segBtns = els.checkoutForm.querySelectorAll(".seg__btn[data-mode]");
-  segBtns.forEach(b => b.addEventListener("click", ()=> setMode(b.dataset.mode)));
+  segBtns.forEach(b => b.addEventListener("click", () => setMode(b.dataset.mode)));
 
   if (addressInput && suggestBox){
-    addressInput.addEventListener("input", ()=>{
+    addressInput.addEventListener("input", () => {
       const q = addressInput.value.trim();
       clearTimeout(suggestTimer);
 
@@ -811,22 +823,22 @@ async function init(){
         return;
       }
 
-      suggestTimer = setTimeout(async ()=>{
-        try{
+      suggestTimer = setTimeout(async () => {
+        try {
           const items = await suggestAddress(q);
           renderSuggest(items);
-        }catch{
+        } catch {
           clearSuggest();
         }
       }, 250);
     });
 
-    addressInput.addEventListener("blur", ()=>{
+    addressInput.addEventListener("blur", () => {
       clearTimeout(blurTimer);
-      blurTimer = setTimeout(()=>commitAddressFromInput(), 220);
+      blurTimer = setTimeout(() => commitAddressFromInput(), 220);
     });
 
-    addressInput.addEventListener("keydown", (e)=>{
+    addressInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter"){
         e.preventDefault();
         commitAddressFromInput();
@@ -834,14 +846,14 @@ async function init(){
       }
     });
 
-    document.addEventListener("click", (e)=>{
+    document.addEventListener("click", (e) => {
       if (e.target === addressInput) return;
       if (suggestBox.contains(e.target)) return;
       clearSuggest();
     });
   }
 
-  els.checkoutForm.addEventListener("submit", async (e)=>{
+  els.checkoutForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     if (cartCount() === 0) return showToast("Корзина пуста");
@@ -877,7 +889,7 @@ async function init(){
       btn.textContent = "Отправляем…";
     }
 
-    try{
+    try {
       await sendOrder(payload);
 
       state.cart = {};
@@ -886,8 +898,7 @@ async function init(){
       renderTotals();
 
       showCheckoutSuccess();
-
-    }catch(err){
+    } catch (err){
       showToast(String(err.message || err));
       if (btn){
         btn.disabled = false;
@@ -896,8 +907,8 @@ async function init(){
     }
   });
 
-  MENU = await fetch("data/menu.json").then(r=>r.json());
-  ZONES = await fetch("data/zones.geojson").then(r=>r.json()).catch(()=>null);
+  MENU = await fetch("data/menu.json").then(r => r.json());
+  ZONES = await fetch("data/zones.geojson").then(r => r.json()).catch(() => null);
 
   renderTabs();
   renderProducts();
