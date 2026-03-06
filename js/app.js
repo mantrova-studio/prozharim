@@ -504,7 +504,7 @@ async function sendOrder(payload){
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-Client-Key": "sytnay_dostavka_prozharim_secret_teatralnaya_liniya_kichigina_order_new"
+      "X-Order-Secret": "sytnay_dostavka_prozharim_secret_teatralnaya_liniya_kichigina_order_new"
     },
     body: JSON.stringify(payload)
   });
