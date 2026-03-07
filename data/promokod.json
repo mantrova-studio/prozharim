@@ -1,0 +1,10 @@
+{
+  "promocodes": [
+    {
+      "title": "День рождения",
+      "code": "birthday",
+      "percent": 10,
+      "active": true
+    }
+  ]
+}
