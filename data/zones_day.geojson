@@ -6,7 +6,7 @@
       "properties": {
         "zone": "Ф1 - Линия",
         "restaurant": "27 Линия 60",
-        "deliveryPrice": 150
+        "deliveryPrice": 0
       },
       "geometry": {
         "type": "Polygon",
