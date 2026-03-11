@@ -169,11 +169,11 @@
   {
     "id": "pizza-pepperoni-35-sm",
     "category": "Пицца",
-    "name": "Пицца «Пепперони» 35 см",
+    "name": "Пицца \"Пепперони\" 35 см",
     "desc": "",
     "price": 900,
     "weight": "670 г",
-    "img": "./assets/photos/Пицца «Пепперони» 35 см.jpg"
+    "img": "./assets/photos/Пицца Пепперони.jpg"
   },
   {
     "id": "pizza-pepperoni-40-sm",
@@ -182,16 +182,16 @@
     "desc": "",
     "price": 1350,
     "weight": "900 г",
-    "img": "./assets/photos/Пицца \"Пепперони\" 40 см.jpg"
+    "img": "./assets/photos/Пицца Пепперони.jpg"
   },
   {
     "id": "pizza-4-syra-35-sm",
     "category": "Пицца",
-    "name": "Пицца «4 сыра» 35 см",
+    "name": "Пицца \"4 сыра\" 35 см",
     "desc": "",
     "price": 850,
     "weight": "600 г",
-    "img": "./assets/photos/Пицца «4 сыра» 35 см.jpg"
+    "img": "./assets/photos/Пицца 4 сыра.jpg"
   },
   {
     "id": "pizza-4-syra-40-sm",
@@ -200,16 +200,16 @@
     "desc": "",
     "price": 1250,
     "weight": "820 г",
-    "img": "./assets/photos/Пицца \"4 Сыра\" 40 см.jpg"
+    "img": "./assets/photos/Пицца 4 Сыра.jpg"
   },
   {
     "id": "pizza-grusha-gorgonzola-35-sm",
     "category": "Пицца",
-    "name": "Пицца «Груша Горгонзола» 35 см",
+    "name": "Пицца \"Груша Горгонзола\" 35 см",
     "desc": "",
     "price": 950,
     "weight": "700 г",
-    "img": "./assets/photos/Пицца «Груша Горгонзола» 35 см.jpg"
+    "img": "./assets/photos/Пицца Груша Горгонзола.jpg"
   },
   {
     "id": "pizza-grusha-gorgonzola-40-sm",
@@ -218,16 +218,16 @@
     "desc": "",
     "price": 1380,
     "weight": "900 г",
-    "img": "./assets/photos/Пицца \"Груша Горгонзола\" 40 см.jpg"
+    "img": "./assets/photos/Пицца Груша Горгонзола.jpg"
   },
   {
     "id": "pizza-kampanyolla-35-sm",
     "category": "Пицца",
-    "name": "Пицца «Кампаньёлла» 35 см",
+    "name": "Пицца \"Кампаньёлла\" 35 см",
     "desc": "",
     "price": 900,
     "weight": "700 г",
-    "img": "./assets/photos/Пицца «Кампаньёлла» 35 см.jpg"
+    "img": "./assets/photos/Пицца Кампаньёлла.jpg"
   },
   {
     "id": "pizza-kampanyolla-40-sm",
@@ -236,7 +236,7 @@
     "desc": "",
     "price": 1150,
     "weight": "950 г",
-    "img": "./assets/photos/Пицца \"Кампаньёлла\" 40 см.jpg"
+    "img": "./assets/photos/Пицца Кампаньёлла.jpg"
   },
   {
     "id": "pizza-lardo-40-sm",
@@ -245,25 +245,25 @@
     "desc": "",
     "price": 1290,
     "weight": "950 г",
-    "img": "./assets/photos/Пицца \"Лардо\" 40 см.jpg"
+    "img": "./assets/photos/Пицца Лардо.jpg"
   },
   {
     "id": "pizza-lardo-35-sm",
     "category": "Пицца",
-    "name": "Пицца «Лардо» 35 см",
+    "name": "Пицца \"Лардо\" 35 см",
     "desc": "",
     "price": 950,
     "weight": "700 г",
-    "img": "./assets/photos/Пицца «Лардо» 35 см.jpg"
+    "img": "./assets/photos/Пицца Лардо.jpg"
   },
   {
     "id": "pizza-mareremonti-35-sm",
     "category": "Пицца",
-    "name": "Пицца «Мареремонти» 35 см",
+    "name": "Пицца \"Мареремонти\" 35 см",
     "desc": "",
     "price": 1390,
     "weight": "700 г",
-    "img": "./assets/photos/Пицца «Мареремонти» 35 см.jpg"
+    "img": "./assets/photos/Пицца Мареремонти.jpg"
   },
   {
     "id": "pizza-maremonti-40-sm",
@@ -272,7 +272,7 @@
     "desc": "",
     "price": 1950,
     "weight": "950 г",
-    "img": "./assets/photos/Пицца \"Маремонти\" 40 см.jpg"
+    "img": "./assets/photos/Пицца Маремонти.jpg"
   },
   {
     "id": "pizza-montanara-40-sm",
@@ -281,16 +281,16 @@
     "desc": "",
     "price": 1150,
     "weight": "900 г",
-    "img": "./assets/photos/Пицца \"Монтанара\" 40 см.jpg"
+    "img": "./assets/photos/Пицца Монтанара.jpg"
   },
   {
     "id": "pizza-montanara-35-sm",
     "category": "Пицца",
-    "name": "Пицца «Монтанара» 35 см",
+    "name": "Пицца \"Монтанара\" 35 см",
     "desc": "",
     "price": 800,
     "weight": "670 г",
-    "img": "./assets/photos/Пицца «Монтанара» 35 см.jpg"
+    "img": "./assets/photos/Пицца Монтанара.jpg"
   },
   {
     "id": "pizza-pikolini-40-sm",
@@ -299,7 +299,7 @@
     "desc": "",
     "price": 1100,
     "weight": "900 г",
-    "img": "./assets/photos/Пицца \"Пиколини\" 40 см.jpg"
+    "img": "./assets/photos/Пицца Пиколини.jpg"
   },
   {
     "id": "pizza-ortolano-40-sm",
@@ -308,34 +308,34 @@
     "desc": "",
     "price": 900,
     "weight": "950 г",
-    "img": "./assets/photos/Пицца \"Ортолано\" 40 см.jpg"
+    "img": "./assets/photos/Пицца Ортолано.jpg"
   },
   {
     "id": "pizza-ortolano-35-sm",
     "category": "Пицца",
-    "name": "Пицца «Ортолано» 35 см",
+    "name": "Пицца \"Ортолано\" 35 см",
     "desc": "",
     "price": 950,
     "weight": "700 г",
-    "img": "./assets/photos/Пицца «Ортолано» 35 см.jpg"
+    "img": "./assets/photos/Пицца Ортолано.jpg"
   },
   {
     "id": "pizza-pikolini-35-sm",
     "category": "Пицца",
-    "name": "Пицца «Пиколини» 35 см",
+    "name": "Пицца \"Пиколини\" 35 см",
     "desc": "",
     "price": 750,
     "weight": "670 г",
-    "img": "./assets/photos/Пицца «Пиколини» 35 см.jpg"
+    "img": "./assets/photos/Пицца Пиколини.jpg"
   },
   {
     "id": "pizza-proshutto-funge-35-sm",
     "category": "Пицца",
-    "name": "Пицца «Прошутто Фунге» 35 см",
+    "name": "Пицца \"Прошутто Фунге\" 35 см",
     "desc": "",
     "price": 750,
     "weight": "690 г",
-    "img": "./assets/photos/Пицца «Прошутто Фунге» 35 см.jpg"
+    "img": "./assets/photos/Пицца Прошутто Фунге.jpg"
   },
   {
     "id": "pizza-proshutto-funge-40-sm",
@@ -344,7 +344,7 @@
     "desc": "",
     "price": 1050,
     "weight": "950 г",
-    "img": "./assets/photos/Пицца \"Прошутто Фунге\" 40 см.jpg"
+    "img": "./assets/photos/Пицца Прошутто Фунге.jpg"
   },
   {
     "id": "pizza-rivera-40-sm",
@@ -353,25 +353,25 @@
     "desc": "",
     "price": 1250,
     "weight": "1000 г",
-    "img": "./assets/photos/Пицца \"Ривьера\" 40 см.jpg"
+    "img": "./assets/photos/Пицца Ривьера.jpg"
   },
   {
     "id": "pizza-rivera-35-sm",
     "category": "Пицца",
-    "name": "Пицца «Ривьера» 35 см",
+    "name": "Пицца \"Ривьера\" 35 см",
     "desc": "",
     "price": 1490,
     "weight": "700 г",
-    "img": "./assets/photos/Пицца «Ривьера» 35 см.jpg"
+    "img": "./assets/photos/Пицца Ривьера.jpg"
   },
   {
     "id": "pizza-tropikana-35-sm",
     "category": "Пицца",
-    "name": "Пицца «Тропикана» 35 см",
+    "name": "Пицца \"Тропикана\" 35 см",
     "desc": "",
     "price": 900,
     "weight": "700 г",
-    "img": "./assets/photos/Пицца «Тропикана» 35 см.jpg"
+    "img": "./assets/photos/Пицца Тропикана.jpg"
   },
   {
     "id": "pizza-tropikana-40-sm",
@@ -380,16 +380,16 @@
     "desc": "",
     "price": 1250,
     "weight": "1000 г",
-    "img": "./assets/photos/Пицца \"Тропикана\" 40 см.jpg"
+    "img": "./assets/photos/Пицца Тропикана.jpg"
   },
   {
     "id": "pizza-chorizo-35-sm",
     "category": "Пицца",
-    "name": "Пицца «Чоризо» 35 см",
+    "name": "Пицца \"Чоризо\" 35 см",
     "desc": "",
     "price": 850,
     "weight": "670 г",
-    "img": "./assets/photos/Пицца «Чоризо» 35 см.jpg"
+    "img": "./assets/photos/Пицца Чоризо.jpg"
   },
   {
     "id": "pizza-chorizo-40-sm",
@@ -398,7 +398,7 @@
     "desc": "",
     "price": 1100,
     "weight": "900 г",
-    "img": "./assets/photos/Пицца \"Чоризо\" 40 см.jpg"
+    "img": "./assets/photos/Пицца Чоризо.jpg"
   },
 
   {
