@@ -432,7 +432,7 @@
     "desc": "",
     "price": 595,
     "weight": "220 г",
-    "img": "/assets/photos/Цезарь с лососем.webp"
+    "img": "./assets/photos/Цезарь с лососем.webp"
   },
   {
     "id": "tsezar-po-bavarski",
