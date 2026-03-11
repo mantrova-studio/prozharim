@@ -45,23 +45,23 @@
 
   <rect x="90" y="130" width="260" height="64" rx="32" fill="#120703" stroke="#FF7A18" stroke-opacity="0.45" stroke-width="2"/>
   <text x="220" y="172" text-anchor="middle" fill="url(#pillFire)" font-size="28" font-family="Arial, Helvetica, sans-serif" font-weight="900" letter-spacing="2">
-    СКИДКА
+    МУЗЫКА
   </text>
 
   <text x="90" y="275" fill="white" font-size="86" font-family="Arial, Helvetica, sans-serif" font-weight="900">
-    ДЕНЬ РОЖДЕНИЯ
+    ВКЛЮЧАЙ ХИТ
   </text>
 
   <text x="90" y="350" fill="#F8F3EC" font-size="44" font-family="Arial, Helvetica, sans-serif" font-weight="700">
-    Используйте промокод birthday
+    Наш фирменный музыкальный релиз
   </text>
 
   <text x="90" y="404" fill="#F2D6B8" font-size="34" font-family="Arial, Helvetica, sans-serif">
-    и получите скидку на заказ.
+    слушай и делись с друзьями
   </text>
 
   <text x="90" y="455" fill="#FFFFFF88" font-size="25" font-family="Arial, Helvetica, sans-serif">
-    
+    Доступно на популярных площадках
   </text>
 
   <!-- КНОПКИ -->
