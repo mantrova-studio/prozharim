@@ -638,7 +638,7 @@ select option{
 .promoRow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
 .promoApplyBtn{white-space:nowrap;min-width:132px}
 #promoBadge{display:inline-flex;align-items:center;justify-content:center;min-width:56px;padding:3px 8px;border-radius:999px;border:1px solid rgba(var(--accent2Rgb),.35);background:rgba(var(--accent2Rgb),.12);color:var(--accentSoft);font-size:12px;font-weight:800;margin-left:6px}
-.contactActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.contactActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;justify-content:center}
 .socialBtn{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);color:var(--txt);transition:transform .18s ease,border-color .18s ease,background .18s ease}
 .socialBtn:hover{transform:translateY(-1px);border-color:rgba(var(--accent2Rgb),.38);background:rgba(var(--accent2Rgb),.08)}
 .socialBtn svg{width:18px;height:18px;flex:0 0 18px}
