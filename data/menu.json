@@ -266,11 +266,11 @@
   {
     "id": "pizza-maremonti-40-sm",
     "category": "Пицца",
-    "name": "Пицца \"Маремонти\" 40 см",
+    "name": "Пицца \"Мареремонти\" 40 см",
     "desc": "",
     "price": 1950,
     "weight": "950 г",
-    "img": "./assets/photos/Пицца Маремонти.webp"
+    "img": "./assets/photos/Пицца Мареремонти.webp"
   },
   {
     "id": "pizza-montanara-40-sm",
