@@ -66,7 +66,7 @@
 
   <!-- КНОПКИ -->
 
-<a href="#">
+<a href="https://vk.com">
 <g filter="url(#softShadowLuxury)">
 <rect x="1180" y="160" width="122" height="122" rx="28" fill="url(#btnLuxury)" stroke="#FF7A18" stroke-width="2"/>
 <circle cx="1241" cy="221" r="29" fill="#FC3F1D"/>
