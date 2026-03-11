@@ -468,7 +468,7 @@
     "desc": "",
     "price": 30,
     "weight": "25 г",
-    "img": "./assets/photos/Соус Сырный \"HEINZ\".webp"
+    "img": "./assets/photos/Соус Сырный HEINZ.webp"
   },
   {
     "id": "sous-barbekyu-heinz",
@@ -477,7 +477,7 @@
     "desc": "",
     "price": 30,
     "weight": "25 г",
-    "img": "./assets/photos/Соус Барбекью \"HEINZ\".webp"
+    "img": "./assets/photos/Соус Барбекью HEINZ.webp"
   },
   {
     "id": "sous-kislo-sladkiy-heinz",
@@ -486,7 +486,7 @@
     "desc": "",
     "price": 30,
     "weight": "25 г",
-    "img": "./assets/photos/Соус Кисло-Сладкий \"HEINZ\".webp"
+    "img": "./assets/photos/Соус Кисло-Сладкий HEINZ.webp"
   },
   {
     "id": "mors-klyukva-smorodina-1l",
@@ -504,24 +504,24 @@
     "desc": "",
     "price": 200,
     "weight": "",
-    "img": "./assets/photos/Кола \"Добрый\" 1л.webp"
+    "img": "./assets/photos/Кола Добрый 1л.webp"
   },
   {
     "id": "sprajt-dobryy-1l",
     "category": "Напитки",
-    "name": "Спрайт \"Добрый\" 1 л",
+    "name": "Спрайт \"Добрый\" 1л",
     "desc": "",
     "price": 200,
     "weight": "",
-    "img": "./assets/photos/Спрайт \"Добрый\" 1 л.webp"
+    "img": "./assets/photos/Спрайт Добрый 1л.webp"
   },
   {
     "id": "fanta-dobryy-1l",
     "category": "Напитки",
-    "name": "Фанта \"Добрый\" 1 л",
+    "name": "Фанта \"Добрый\" 1л",
     "desc": "",
     "price": 200,
     "weight": "",
-    "img": "./assets/photos/Фанта \"Добрый\" 1 л.webp"
+    "img": "./assets/photos/Фанта Добрый 1л.webp"
   }
 ]
